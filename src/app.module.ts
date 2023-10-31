@@ -5,6 +5,10 @@ import { UsersModule } from './features/users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './features/auth/auth.module';
 import { User } from './features/users/users.entity';
+import { ProjectsModule } from './features/projects/projects.module';
+import { Member } from './features/members/members.entity';
+import { Project } from './features/projects/projects.entity';
+import { MembersModule } from './features/members/members.module';
 
 @Module({
   imports: [
@@ -17,10 +21,12 @@ import { User } from './features/users/users.entity';
       username: 'root',
       password: '1234',
       database: 'backlog',
-      entities: [User],
+      entities: [User, Project, Member],
       autoLoadEntities: true,
       synchronize: true,
     }),
+    ProjectsModule,
+    MembersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
