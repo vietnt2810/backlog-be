@@ -2,10 +2,11 @@ import {
   Column,
   Entity,
   JoinColumn,
-  OneToOne,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from '../users/users.entity';
+import { Project } from '../projects/projects.entity';
 
 @Entity()
 export class Member {
@@ -21,7 +22,11 @@ export class Member {
   @Column()
   role: boolean;
 
-  @OneToOne(() => User)
+  @ManyToOne(() => User)
   @JoinColumn()
   user: User;
+
+  @ManyToOne(() => Project)
+  @JoinColumn()
+  project: Project;
 }

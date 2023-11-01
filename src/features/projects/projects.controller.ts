@@ -7,9 +7,9 @@ import {
   Post,
 } from '@nestjs/common';
 import { ProjectsService } from './projects.service';
-import { CreateProjectDto } from './dtos/createProject.dto';
 import { MembersService } from '../members/members.service';
 import { AddMemberDto } from '../members/dtos/addMember.dto';
+import { CreateProjectDto } from './dtos/createProject.dto';
 
 @Controller('projects')
 export class ProjectsController {
@@ -30,8 +30,12 @@ export class ProjectsController {
 
   @Post(':projectId/add-member')
   addMember(
-    @Param('projectId', ParseIntPipe) addMemberRequestBody: AddMemberDto,
+    @Param('projectId', ParseIntPipe) projectId: number,
+    @Body() addMemberRequestBody: AddMemberDto,
   ) {
-    return this.membersService.addMember(addMemberRequestBody);
+    return this.membersService.addMember({
+      ...addMemberRequestBody,
+      projectId,
+    });
   }
 }
