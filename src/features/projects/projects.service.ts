@@ -23,5 +23,7 @@ export class ProjectsService {
       userId: createProjectRequestBody.userId,
       role: true,
     });
+
+    return createdProject;
   }
 }
