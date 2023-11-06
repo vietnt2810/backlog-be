@@ -1,10 +1,15 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Member } from './members.entity';
 import { Repository } from 'typeorm';
 import { AddMemberDto } from './dtos/addMember.dto';
 import { UsersService } from '../users/users.service';
 import { isEmpty } from 'lodash';
+import { ChangeMemberNameDto } from './dtos/changeMemberName.dto';
 
 @Injectable()
 export class MembersService {
@@ -16,13 +21,25 @@ export class MembersService {
 
   async addMember(addMemberRequestBody: AddMemberDto) {
     if (addMemberRequestBody.userId) {
-      await this.memberRepository.save(addMemberRequestBody);
+      // Add the first person to project
+      const user = await this.usersService.findOne(addMemberRequestBody.userId);
+
+      if (isEmpty(user)) {
+        throw new BadRequestException('Something occured, user does not exist');
+      }
+
+      await this.memberRepository.save({
+        ...addMemberRequestBody,
+        username: user.username,
+      });
     } else {
+      // Add new member to project
       const user = await this.usersService.findOneByEmail(
         addMemberRequestBody.email,
       );
+
       if (isEmpty(user)) {
-        throw new BadRequestException('User does not exist');
+        throw new NotFoundException('User does not exist');
       }
 
       const alreadyAddedUser = await this.memberRepository.findOne({
@@ -34,11 +51,29 @@ export class MembersService {
           projectId: addMemberRequestBody.projectId,
           userId: user ? user.id : addMemberRequestBody.userId,
           role: addMemberRequestBody.role,
+          username: user.username,
         });
       } else {
         throw new BadRequestException('User is already added');
       }
     }
+  }
+
+  async changeMemberNameInProject(
+    projectId: number,
+    memberId: number,
+    changeMemberNameRequestBody: ChangeMemberNameDto,
+  ) {
+    const member = await this.memberRepository.findOne({
+      where: { userId: memberId, projectId },
+    });
+
+    if (!member) throw new NotFoundException('User does not exist');
+
+    this.memberRepository.update(
+      { userId: memberId, projectId },
+      { username: changeMemberNameRequestBody.memberName },
+    );
   }
 
   async getMembers(projectId: number) {

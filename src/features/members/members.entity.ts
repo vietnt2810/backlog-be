@@ -17,6 +17,9 @@ export class Member {
   userId: number;
 
   @Column()
+  username: string;
+
+  @Column()
   projectId: number;
 
   @Column()
