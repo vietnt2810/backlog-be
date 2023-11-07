@@ -26,4 +26,8 @@ export class ProjectsService {
 
     return createdProject;
   }
+
+  async findOne(id: number): Promise<Project | undefined> {
+    return this.projectRepository.findOneBy({ id });
+  }
 }
