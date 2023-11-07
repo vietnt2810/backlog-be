@@ -25,7 +25,7 @@ export class MembersService {
       const user = await this.usersService.findOne(addMemberRequestBody.userId);
 
       if (isEmpty(user)) {
-        throw new BadRequestException('Something occured, user does not exist');
+        throw new NotFoundException('Something occurred, user does not exist');
       }
 
       await this.memberRepository.save({
