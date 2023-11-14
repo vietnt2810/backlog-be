@@ -92,4 +92,20 @@ export class MembersService {
       },
     });
   }
+  async getProjects(userId: number) {
+    const data = await this.memberRepository.find({
+      where: {
+        userId,
+      },
+      relations: {
+        project: true,
+      },
+    });
+
+    const projects = data.map((item) => {
+      return item.project;
+    });
+
+    return projects;
+  }
 }
