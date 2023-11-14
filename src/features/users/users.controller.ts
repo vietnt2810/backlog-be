@@ -23,6 +23,11 @@ export class UsersController {
     return this.userService.findAll();
   }
 
+  @Get(':userId')
+  findOne(@Param('userId', ParseIntPipe) userId: number) {
+    return this.userService.findOne(userId);
+  }
+
   @Public()
   @Post()
   create(@Body() user: User) {
