@@ -5,11 +5,13 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Put,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { User } from './users.entity';
 import { Public } from '../auth/guard/auth.guard';
 import { MembersService } from '../members/members.service';
+import { UpdateUserProfileDto } from './dtos/updateUserProfile.dto';
 
 @Controller('users')
 export class UsersController {
@@ -32,6 +34,13 @@ export class UsersController {
   @Post()
   create(@Body() user: User) {
     return this.userService.create(user);
+  }
+
+  @Put()
+  updateUserProfile(
+    @Body() updateUserProfileRequestBody: UpdateUserProfileDto,
+  ) {
+    return this.userService.updateUserProfile(updateUserProfileRequestBody);
   }
 
   @Get(':userId/projects')
