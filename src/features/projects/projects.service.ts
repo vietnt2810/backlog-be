@@ -27,6 +27,10 @@ export class ProjectsService {
     return createdProject;
   }
 
+  async deleteProject(projectId: number) {
+    await this.projectRepository.delete({ id: projectId });
+  }
+
   async findOne(id: number): Promise<Project | undefined> {
     return this.projectRepository.findOneBy({ id });
   }

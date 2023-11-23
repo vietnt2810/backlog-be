@@ -29,7 +29,9 @@ export class Member {
   @JoinColumn()
   user: User;
 
-  @ManyToOne(() => Project)
+  @ManyToOne(() => Project, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn()
   project: Project;
 }
