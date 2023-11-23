@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -52,5 +53,10 @@ export class ProjectsController {
       memberId,
       changeMemberNameRequestBody,
     );
+  }
+
+  @Delete(':projectId')
+  deleteProject(@Param('projectId', ParseIntPipe) projectId: number) {
+    return this.projectsService.deleteProject(projectId);
   }
 }
