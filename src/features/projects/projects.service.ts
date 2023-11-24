@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Project } from './projects.entity';
-import { CreateProjectDto } from './dtos/createProject.dto';
+import { CreateEditProjectDto } from './dtos/createProject.dto';
 import { MembersService } from '../members/members.service';
 
 @Injectable()
@@ -13,7 +13,7 @@ export class ProjectsService {
     private projectRepository: Repository<Project>,
   ) {}
 
-  async createProject(createProjectRequestBody: CreateProjectDto) {
+  async createProject(createProjectRequestBody: CreateEditProjectDto) {
     const createdProject = await this.projectRepository.save({
       projectName: createProjectRequestBody.projectName,
     });
@@ -25,6 +25,18 @@ export class ProjectsService {
     });
 
     return createdProject;
+  }
+
+  async editProject(
+    projectId: number,
+    editProjectRequestBody: CreateEditProjectDto,
+  ) {
+    await this.projectRepository.update(
+      { id: projectId },
+      {
+        ...editProjectRequestBody,
+      },
+    );
   }
 
   async deleteProject(projectId: number) {
