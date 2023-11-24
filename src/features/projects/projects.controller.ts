@@ -11,7 +11,7 @@ import {
 import { ProjectsService } from './projects.service';
 import { MembersService } from '../members/members.service';
 import { AddMemberDto } from '../members/dtos/addMember.dto';
-import { CreateProjectDto } from './dtos/createProject.dto';
+import { CreateEditProjectDto } from './dtos/createProject.dto';
 import { ChangeMemberNameDto } from '../members/dtos/changeMemberName.dto';
 
 @Controller('projects')
@@ -22,8 +22,21 @@ export class ProjectsController {
   ) {}
 
   @Post()
-  createProject(@Body() createProjectRequestBody: CreateProjectDto) {
+  createProject(@Body() createProjectRequestBody: CreateEditProjectDto) {
     return this.projectsService.createProject(createProjectRequestBody);
+  }
+
+  @Put(':projectId')
+  editProject(
+    @Param('projectId', ParseIntPipe) projectId: number,
+    @Body() editProjectRequestBody: CreateEditProjectDto,
+  ) {
+    return this.projectsService.editProject(projectId, editProjectRequestBody);
+  }
+
+  @Delete(':projectId')
+  deleteProject(@Param('projectId', ParseIntPipe) projectId: number) {
+    return this.projectsService.deleteProject(projectId);
   }
 
   @Get(':projectId/members')
@@ -53,10 +66,5 @@ export class ProjectsController {
       memberId,
       changeMemberNameRequestBody,
     );
-  }
-
-  @Delete(':projectId')
-  deleteProject(@Param('projectId', ParseIntPipe) projectId: number) {
-    return this.projectsService.deleteProject(projectId);
   }
 }
