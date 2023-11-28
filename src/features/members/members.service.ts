@@ -92,6 +92,17 @@ export class MembersService {
       },
     });
   }
+
+  async getMemberDetail(projectId: number, memberId: number) {
+    return await this.memberRepository.findOne({
+      where: { projectId, userId: memberId },
+      select: {
+        username: true,
+        role: true,
+      },
+    });
+  }
+
   async getProjects(userId: number) {
     const data = await this.memberRepository.find({
       where: {

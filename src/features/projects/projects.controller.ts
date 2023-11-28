@@ -21,6 +21,11 @@ export class ProjectsController {
     private readonly membersService: MembersService,
   ) {}
 
+  @Get(':projectId')
+  getProject(@Param('projectId', ParseIntPipe) projectId: number) {
+    return this.projectsService.findOne(projectId);
+  }
+
   @Post()
   createProject(@Body() createProjectRequestBody: CreateEditProjectDto) {
     return this.projectsService.createProject(createProjectRequestBody);
@@ -42,6 +47,14 @@ export class ProjectsController {
   @Get(':projectId/members')
   getMembers(@Param('projectId', ParseIntPipe) projectId: number) {
     return this.membersService.getMembers(projectId);
+  }
+
+  @Get(':projectId/members/:memberId')
+  getMemberDetail(
+    @Param('projectId', ParseIntPipe) projectId: number,
+    @Param('memberId', ParseIntPipe) memberId: number,
+  ) {
+    return this.membersService.getMemberDetail(projectId, memberId);
   }
 
   @Post(':projectId/add-member')
