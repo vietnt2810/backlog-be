@@ -68,7 +68,7 @@ export class ProjectsController {
     });
   }
 
-  @Put(':projectId/change-member-name/:memberId')
+  @Put(':projectId/members/:memberId')
   changeMemberNameInProject(
     @Param('projectId', ParseIntPipe) projectId: number,
     @Param('memberId', ParseIntPipe) memberId: number,

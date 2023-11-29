@@ -28,6 +28,11 @@ export class SubProjectsService {
       where: {
         projectId,
       },
+      select: {
+        id: true,
+        subProjectName: true,
+        subTitle: true,
+      },
     });
   }
 
