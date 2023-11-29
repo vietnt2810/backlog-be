@@ -16,6 +16,9 @@ export class SubProject {
   @Column()
   subProjectName: string;
 
+  @Column()
+  subTitle: string;
+
   @CreateDateColumn()
   createdAt: Date;
 
