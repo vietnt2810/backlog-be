@@ -8,7 +8,6 @@ import { CreateAndEditSubProjectDto } from './dtos/createAndEditSubProjectDto.dt
 @Injectable()
 export class SubProjectsService {
   constructor(
-    private projectsService: ProjectsService,
     @InjectRepository(SubProject)
     private subProjectRepository: Repository<SubProject>,
   ) {}

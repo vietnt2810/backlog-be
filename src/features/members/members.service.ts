@@ -114,9 +114,35 @@ export class MembersService {
     });
 
     const projects = data.map((item) => {
-      return item.project;
+      return {
+        role: item.role,
+        project: item.project,
+      };
     });
 
     return projects;
+  }
+
+  async getProjectDetail(userId: number, projectId: number) {
+    const data = await this.memberRepository.findOne({
+      where: {
+        userId,
+        projectId,
+      },
+      relations: {
+        project: true,
+      },
+    });
+
+    const projectDetail = {
+      username: data.username,
+      role: data.role,
+      project: {
+        id: data.project.id,
+        projectName: data.project.projectName,
+      },
+    };
+
+    return projectDetail;
   }
 }
