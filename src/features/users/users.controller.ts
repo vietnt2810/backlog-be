@@ -20,20 +20,9 @@ export class UsersController {
     private readonly membersService: MembersService,
   ) {}
 
-  @Get()
-  findAll() {
-    return this.userService.findAll();
-  }
-
   @Get(':userId')
   findOne(@Param('userId', ParseIntPipe) userId: number) {
     return this.userService.findOne(userId);
-  }
-
-  @Public()
-  @Post()
-  create(@Body() user: User) {
-    return this.userService.create(user);
   }
 
   @Put()
@@ -46,5 +35,13 @@ export class UsersController {
   @Get(':userId/projects')
   getProjects(@Param('userId', ParseIntPipe) userId: number) {
     return this.membersService.getProjects(userId);
+  }
+
+  @Get(':userId/projects/:projectId')
+  getProjectDetail(
+    @Param('userId', ParseIntPipe) userId: number,
+    @Param('projectId', ParseIntPipe) projectId: number,
+  ) {
+    return this.membersService.getProjectDetail(userId, projectId);
   }
 }

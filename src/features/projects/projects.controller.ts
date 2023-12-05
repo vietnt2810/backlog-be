@@ -21,11 +21,6 @@ export class ProjectsController {
     private readonly membersService: MembersService,
   ) {}
 
-  @Get(':projectId')
-  getProject(@Param('projectId', ParseIntPipe) projectId: number) {
-    return this.projectsService.findOne(projectId);
-  }
-
   @Post()
   createProject(@Body() createProjectRequestBody: CreateEditProjectDto) {
     return this.projectsService.createProject(createProjectRequestBody);
