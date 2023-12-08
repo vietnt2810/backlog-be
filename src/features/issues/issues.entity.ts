@@ -7,6 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { SubProject } from '../subProjects/subProjects.entity';
+import { User } from '../users/users.entity';
 
 @Entity()
 export class Issue {
@@ -22,8 +23,17 @@ export class Issue {
   @Column()
   description: string;
 
+  @Column()
+  status: number;
+
+  @Column()
+  assigneeId: number;
+
   @CreateDateColumn()
   createdAt: Date;
+
+  @Column()
+  subProjectId: number;
 
   @ManyToOne(() => SubProject)
   @JoinColumn()

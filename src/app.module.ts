@@ -11,6 +11,10 @@ import { Project } from './features/projects/projects.entity';
 import { MembersModule } from './features/members/members.module';
 import { SubProjectsModule } from './features/subProjects/subProjects.module';
 import { SubProject } from './features/subProjects/subProjects.entity';
+import { MasterIssueTypesModule } from './features/masterIssueTypes/masterIssueTypes.module';
+import { Issue } from './features/issues/issues.entity';
+import { MasterIssueType } from './features/masterIssueTypes/masterIssueTypes.entity';
+import { IssuesModule } from './features/issues/issues.module';
 
 @Module({
   imports: [
@@ -23,13 +27,15 @@ import { SubProject } from './features/subProjects/subProjects.entity';
       username: 'root',
       password: '1234',
       database: 'backlog',
-      entities: [User, Project, Member, SubProject],
+      entities: [User, Project, Member, SubProject, Issue, MasterIssueType],
       autoLoadEntities: true,
       synchronize: true,
     }),
     ProjectsModule,
     MembersModule,
     SubProjectsModule,
+    IssuesModule,
+    MasterIssueTypesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
