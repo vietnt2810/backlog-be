@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { SubProject } from './subProjects.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ProjectsService } from '../projects/projects.service';
 import { CreateAndEditSubProjectDto } from './dtos/createAndEditSubProjectDto.dto';
 
 @Injectable()
@@ -20,6 +19,10 @@ export class SubProjectsService {
       ...createSubProjectRequestBody,
       projectId,
     });
+  }
+
+  async getSubProjectDetail(subProjectId: number) {
+    return await this.subProjectRepository.findOneBy({ id: subProjectId });
   }
 
   async getSubProjects(projectId: number) {

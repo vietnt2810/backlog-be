@@ -86,9 +86,12 @@ export class MembersService {
       },
       select: {
         user: {
+          avatarUrl: true,
           email: true,
-          username: true,
         },
+        userId: true,
+        username: true,
+        role: true,
       },
     });
   }

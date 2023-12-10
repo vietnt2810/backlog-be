@@ -14,7 +14,13 @@ export class Issue {
   id: number;
 
   @Column()
-  key: string;
+  keyId: number;
+
+  @Column()
+  issueKey: string;
+
+  @Column()
+  type: number;
 
   @Column()
   subject: string;
@@ -22,8 +28,32 @@ export class Issue {
   @Column()
   description: string;
 
-  @CreateDateColumn()
-  createdAt: Date;
+  @Column()
+  status: number;
+
+  @Column()
+  assigneeId: number;
+
+  @Column()
+  priority: number;
+
+  @Column({ nullable: true })
+  startDate: string;
+
+  @Column({ nullable: true })
+  dueDate: string;
+
+  @Column({ nullable: true })
+  estimatedHour: number;
+
+  @Column({ nullable: true })
+  actualHour: number;
+
+  @Column()
+  createdByUserId: number;
+
+  @Column()
+  subProjectId: number;
 
   @ManyToOne(() => SubProject)
   @JoinColumn()
