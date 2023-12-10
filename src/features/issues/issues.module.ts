@@ -9,10 +9,20 @@ import { User } from '../users/users.entity';
 import { IssuesController } from './issues.controller';
 import { IssuesService } from './issues.service';
 import { Issue } from './issues.entity';
+import { SubProjectsService } from '../subProjects/subProjects.service';
+import { SubProject } from '../subProjects/subProjects.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Issue, Project, Member, User])],
+  imports: [
+    TypeOrmModule.forFeature([Issue, SubProject, Project, Member, User]),
+  ],
   controllers: [IssuesController],
-  providers: [IssuesService, ProjectsService, MembersService, UsersService],
+  providers: [
+    IssuesService,
+    SubProjectsService,
+    ProjectsService,
+    MembersService,
+    UsersService,
+  ],
 })
 export class IssuesModule {}

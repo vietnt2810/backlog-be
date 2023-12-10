@@ -1,8 +1,8 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsOptional } from 'class-validator';
 
 export class CreateIssueDto {
   @IsNotEmpty()
-  key: string;
+  type: number;
 
   @IsNotEmpty()
   subject: string;
@@ -15,4 +15,22 @@ export class CreateIssueDto {
 
   @IsNotEmpty()
   assigneeId: number;
+
+  @IsNotEmpty()
+  priority: number;
+
+  @IsOptional()
+  startDate: string;
+
+  @IsOptional()
+  dueDate: string;
+
+  @IsOptional()
+  estimatedHour: number;
+
+  @IsOptional()
+  actualHour: number;
+
+  @IsNotEmpty()
+  createdByUserId: number;
 }

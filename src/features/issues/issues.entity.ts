@@ -7,7 +7,6 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { SubProject } from '../subProjects/subProjects.entity';
-import { User } from '../users/users.entity';
 
 @Entity()
 export class Issue {
@@ -15,7 +14,13 @@ export class Issue {
   id: number;
 
   @Column()
-  key: string;
+  keyId: number;
+
+  @Column()
+  issueKey: string;
+
+  @Column()
+  type: number;
 
   @Column()
   subject: string;
@@ -29,8 +34,23 @@ export class Issue {
   @Column()
   assigneeId: number;
 
-  @CreateDateColumn()
-  createdAt: Date;
+  @Column()
+  priority: number;
+
+  @Column({ nullable: true })
+  startDate: string;
+
+  @Column({ nullable: true })
+  dueDate: string;
+
+  @Column({ nullable: true })
+  estimatedHour: number;
+
+  @Column({ nullable: true })
+  actualHour: number;
+
+  @Column()
+  createdByUserId: number;
 
   @Column()
   subProjectId: number;
