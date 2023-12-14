@@ -6,12 +6,11 @@ import { MembersService } from '../members/members.service';
 import { UsersService } from '../users/users.service';
 import { Member } from '../members/members.entity';
 import { User } from '../users/users.entity';
-import { IssuesController } from './issues.controller';
-import { IssuesService } from './issues.service';
-import { Issue } from './issues.entity';
 import { SubProjectsService } from '../subProjects/subProjects.service';
 import { SubProject } from '../subProjects/subProjects.entity';
 import { IssueUpdate } from '../issueUpdates/issueUpdate.entity';
+import { IssuesService } from '../issues/issues.service';
+import { Issue } from '../issues/issues.entity';
 
 @Module({
   imports: [
@@ -24,7 +23,6 @@ import { IssueUpdate } from '../issueUpdates/issueUpdate.entity';
       User,
     ]),
   ],
-  controllers: [IssuesController],
   providers: [
     IssuesService,
     SubProjectsService,
@@ -33,4 +31,4 @@ import { IssueUpdate } from '../issueUpdates/issueUpdate.entity';
     UsersService,
   ],
 })
-export class IssuesModule {}
+export class IssueUpdatesModule {}

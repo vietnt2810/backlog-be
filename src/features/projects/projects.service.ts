@@ -21,7 +21,7 @@ export class ProjectsService {
     await this.membersService.addMember({
       projectId: createdProject.id,
       userId: createProjectRequestBody.userId,
-      role: true,
+      role: 1,
     });
 
     return createdProject;

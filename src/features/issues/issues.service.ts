@@ -5,8 +5,11 @@ import { Issue } from './issues.entity';
 import { CreateIssueDto } from './dtos/createIssue.dto';
 import { User } from '../users/users.entity';
 import { Member } from '../members/members.entity';
-import { SubProject } from '../subProjects/subProjects.entity';
 import { SubProjectsService } from '../subProjects/subProjects.service';
+import { SubProject } from '../subProjects/subProjects.entity';
+import { GetProjectIssuesQueryParams } from '../projects/types/projects.types';
+import { IssueUpdate } from '../issueUpdates/issueUpdate.entity';
+import { UpdateIssueDto } from './dtos/updateIssue.dto';
 
 @Injectable()
 export class IssuesService {
@@ -14,7 +17,31 @@ export class IssuesService {
     private subProjectsService: SubProjectsService,
     @InjectRepository(Issue)
     private issueRepository: Repository<Issue>,
+    @InjectRepository(IssueUpdate)
+    private issueUpdateRepository: Repository<IssueUpdate>,
   ) {}
+
+  async getUserProjectIssues(
+    projectId: number,
+    userId: number,
+    getProjectIssuesQueryParams?: GetProjectIssuesQueryParams,
+  ) {
+    const query = await this.issueRepository
+      .createQueryBuilder('issue')
+      .leftJoin(SubProject, 'subProject', 'subProject.id = issue.subProjectId')
+      .select(
+        'issue.id, issue.issueKey, issue.subject, issue.priority, issue.status, issue.dueDate',
+      )
+      .where('subProject.projectId = :projectId', { projectId });
+
+    if (Number(getProjectIssuesQueryParams.isAssigned) === 1) {
+      query.andWhere('issue.assigneeId = :userId', { userId });
+    } else {
+      query.andWhere('issue.createdByUserId = :userId', { userId });
+    }
+
+    return query.getRawMany();
+  }
 
   async getIssueDetail(issueId: number, projectId: number) {
     console.log(projectId);
@@ -32,8 +59,6 @@ export class IssuesService {
       )
       .where({ id: issueId })
       .getRawOne();
-
-    console.log(issue);
   }
 
   async createIssue(
@@ -57,5 +82,13 @@ export class IssuesService {
         lastIssue ? lastIssue.keyId + 1 : 1
       }`,
     });
+  }
+
+  async updateIssue(
+    subProjectId: number,
+    issueId: number,
+    updateIssueRequestBody: UpdateIssueDto,
+  ) {
+    //   await this.issueRepository.update({ updateIssueRequestBody });
   }
 }

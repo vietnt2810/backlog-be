@@ -11,5 +11,5 @@ export class AddMemberDto {
   email?: string;
 
   @IsNotEmpty()
-  role: boolean;
+  role: number;
 }

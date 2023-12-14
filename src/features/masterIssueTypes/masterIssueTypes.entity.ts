@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Project } from '../projects/projects.entity';
 
 @Entity()
 export class MasterIssueType {
@@ -13,4 +20,10 @@ export class MasterIssueType {
 
   @Column({ default: false })
   isCommon: boolean;
+
+  @ManyToOne(() => Project, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn()
+  subProject: Project;
 }
