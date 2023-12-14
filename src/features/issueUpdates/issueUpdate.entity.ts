@@ -1,4 +1,9 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class IssueUpdate {
@@ -17,6 +22,18 @@ export class IssueUpdate {
   @Column({ nullable: true })
   assigneeId: number;
 
+  @Column({ nullable: true })
+  oldStatus: number;
+
+  @Column()
+  newStatus: number;
+
+  @Column()
+  updateType: string;
+
   @Column()
   subProjectId: number;
+
+  @CreateDateColumn()
+  createdAt: Date;
 }
