@@ -4,11 +4,15 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { IssueUpdate } from '../issueUpdates/issueUpdate.entity';
 
 @Injectable()
-export class IssuesService {
+export class IssueUpdatesService {
   constructor(
     @InjectRepository(IssueUpdate)
     private issueUpdateRepository: Repository<IssueUpdate>,
   ) {}
 
-  async 
+  async getSubProjectRecentUpdates(subProjectId: number) {
+    return await this.issueUpdateRepository.find({
+      where: { subProjectId },
+    });
+  }
 }

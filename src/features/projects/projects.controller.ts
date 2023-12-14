@@ -16,6 +16,8 @@ import { CreateEditProjectDto } from './dtos/createProject.dto';
 import { ChangeMemberNameDto } from '../members/dtos/changeMemberName.dto';
 import { IssuesService } from '../issues/issues.service';
 import { GetProjectIssuesQueryParams } from './types/projects.types';
+import { SubProjectsService } from '../subProjects/subProjects.service';
+import { CreateAndEditSubProjectDto } from '../subProjects/dtos/createAndEditSubProjectDto.dto';
 
 @Controller('projects')
 export class ProjectsController {
@@ -23,6 +25,7 @@ export class ProjectsController {
     private readonly projectsService: ProjectsService,
     private readonly membersService: MembersService,
     private readonly issuesService: IssuesService,
+    private readonly subProjectsService: SubProjectsService,
   ) {}
 
   @Post()
@@ -78,6 +81,22 @@ export class ProjectsController {
       memberId,
       changeMemberNameRequestBody,
     );
+  }
+
+  @Post(':projectId/sub-projects')
+  createSubProject(
+    @Param('projectId', ParseIntPipe) projectId: number,
+    @Body() createSubProjectRequestBody: CreateAndEditSubProjectDto,
+  ) {
+    return this.subProjectsService.createSubProject(
+      projectId,
+      createSubProjectRequestBody,
+    );
+  }
+
+  @Get(':projectId/sub-projects')
+  getSubProjects(@Param('projectId', ParseIntPipe) projectId: number) {
+    return this.subProjectsService.getSubProjects(projectId);
   }
 
   @Get('/:projectId/:userId/issues')

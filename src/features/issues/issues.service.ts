@@ -74,13 +74,22 @@ export class IssuesService {
     const subProject =
       await this.subProjectsService.getSubProjectDetail(subProjectId);
 
-    await this.issueRepository.save({
+    const createdIssue = await this.issueRepository.save({
       ...createIssueRequestBody,
       subProjectId,
       keyId: lastIssue ? lastIssue.keyId + 1 : 1,
       issueKey: `${subProject.subProjectName}-${
         lastIssue ? lastIssue.keyId + 1 : 1
       }`,
+    });
+
+    await this.issueUpdateRepository.save({
+      issueId: createdIssue.id,
+      createdByUserId: createdIssue.createdByUserId,
+      assigneeId: createdIssue.assigneeId,
+      newStatus: createdIssue.status,
+      updateType: 'create',
+      subProjectId,
     });
   }
 

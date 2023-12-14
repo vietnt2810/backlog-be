@@ -9,33 +9,23 @@ import {
 } from '@nestjs/common';
 import { SubProjectsService } from './subProjects.service';
 import { CreateAndEditSubProjectDto } from './dtos/createAndEditSubProjectDto.dto';
+import { IssueUpdatesService } from '../issueUpdates/issueUpdate.service';
 
-@Controller('projects')
+@Controller('sub-projects')
 export class SubProjectsController {
-  constructor(private readonly subProjectsService: SubProjectsService) {}
+  constructor(
+    private readonly subProjectsService: SubProjectsService,
+    private readonly issueUpdatesService: IssueUpdatesService,
+  ) {}
 
-  @Post(':projectId/sub-projects')
-  createSubProject(
-    @Param('projectId', ParseIntPipe) projectId: number,
-    @Body() createSubProjectRequestBody: CreateAndEditSubProjectDto,
+  @Get('/:subProjectId')
+  getSubProjectDetail(
+    @Param('subProjectId', ParseIntPipe) subProjectId: number,
   ) {
-    return this.subProjectsService.createSubProject(
-      projectId,
-      createSubProjectRequestBody,
-    );
-  }
-
-  @Get(':projectId/sub-projects')
-  getSubProjects(@Param('projectId', ParseIntPipe) projectId: number) {
-    return this.subProjectsService.getSubProjects(projectId);
-  }
-
-  @Get(':projectId/sub-projects/:subProjectId')
-  getSubProjectDetail(@Param('subProjectId', ParseIntPipe) subProjectId: number) {
     return this.subProjectsService.getSubProjectDetail(subProjectId);
   }
 
-  @Put(':projectId/sub-projects/:subProjectId')
+  @Put('/:subProjectId')
   changeSubProjectName(
     @Param('subProjectId', ParseIntPipe) subProjectId: number,
     @Body() changeSubProjectNameRequestBody: CreateAndEditSubProjectDto,
@@ -44,5 +34,12 @@ export class SubProjectsController {
       subProjectId,
       changeSubProjectNameRequestBody,
     );
+  }
+
+  @Get('/:subProjectId/recent-updates')
+  getSubProjectRecentUpdates(
+    @Param('subProjectId', ParseIntPipe) subProjectId: number,
+  ) {
+    return this.issueUpdatesService.getSubProjectRecentUpdates(subProjectId);
   }
 }

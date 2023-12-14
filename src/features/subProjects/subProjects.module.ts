@@ -9,11 +9,16 @@ import { MembersService } from '../members/members.service';
 import { UsersService } from '../users/users.service';
 import { Member } from '../members/members.entity';
 import { User } from '../users/users.entity';
+import { IssueUpdatesService } from '../issueUpdates/issueUpdate.service';
+import { IssueUpdate } from '../issueUpdates/issueUpdate.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([SubProject, Project, Member, User])],
+  imports: [
+    TypeOrmModule.forFeature([IssueUpdate, SubProject, Project, Member, User]),
+  ],
   controllers: [SubProjectsController],
   providers: [
+    IssueUpdatesService,
     SubProjectsService,
     ProjectsService,
     MembersService,
