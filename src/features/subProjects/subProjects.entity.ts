@@ -25,7 +25,9 @@ export class SubProject {
   @Column()
   projectId: number;
 
-  @ManyToOne(() => Project)
+  @ManyToOne(() => Project, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn()
   project: Project;
 }

@@ -23,7 +23,7 @@ export class Member {
   projectId: number;
 
   @Column()
-  role: boolean;
+  role: number;
 
   @ManyToOne(() => User)
   @JoinColumn()

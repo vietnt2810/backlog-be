@@ -22,7 +22,10 @@ export class SubProjectsService {
   }
 
   async getSubProjectDetail(subProjectId: number) {
-    return await this.subProjectRepository.findOneBy({ id: subProjectId });
+    return await this.subProjectRepository.findOne({
+      where: { id: subProjectId },
+      select: { subProjectName: true, subTitle: true },
+    });
   }
 
   async getSubProjects(projectId: number) {

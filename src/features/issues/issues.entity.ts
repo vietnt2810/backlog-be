@@ -31,7 +31,7 @@ export class Issue {
   @Column()
   status: number;
 
-  @Column()
+  @Column({ nullable: true })
   assigneeId: number;
 
   @Column()
@@ -55,7 +55,9 @@ export class Issue {
   @Column()
   subProjectId: number;
 
-  @ManyToOne(() => SubProject)
+  @ManyToOne(() => SubProject, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn()
   subProject: SubProject;
 }

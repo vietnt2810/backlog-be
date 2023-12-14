@@ -30,6 +30,11 @@ export class SubProjectsController {
     return this.subProjectsService.getSubProjects(projectId);
   }
 
+  @Get(':projectId/sub-projects/:subProjectId')
+  getSubProjectDetail(@Param('subProjectId', ParseIntPipe) subProjectId: number) {
+    return this.subProjectsService.getSubProjectDetail(subProjectId);
+  }
+
   @Put(':projectId/sub-projects/:subProjectId')
   changeSubProjectName(
     @Param('subProjectId', ParseIntPipe) subProjectId: number,
