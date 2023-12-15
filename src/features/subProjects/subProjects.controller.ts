@@ -10,12 +10,14 @@ import {
 import { SubProjectsService } from './subProjects.service';
 import { CreateAndEditSubProjectDto } from './dtos/createAndEditSubProjectDto.dto';
 import { IssueUpdatesService } from '../issueUpdates/issueUpdate.service';
+import { IssuesService } from '../issues/issues.service';
 
 @Controller('sub-projects')
 export class SubProjectsController {
   constructor(
     private readonly subProjectsService: SubProjectsService,
     private readonly issueUpdatesService: IssueUpdatesService,
+    private readonly issuesService: IssuesService,
   ) {}
 
   @Get('/:subProjectId')
@@ -41,5 +43,12 @@ export class SubProjectsController {
     @Param('subProjectId', ParseIntPipe) subProjectId: number,
   ) {
     return this.issueUpdatesService.getSubProjectRecentUpdates(subProjectId);
+  }
+
+  @Get('/:subProjectId/issue-status')
+  getSubProjectIssueStatusList(
+    @Param('subProjectId', ParseIntPipe) subProjectId: number,
+  ) {
+    return this.issuesService.getIssueStatusList(subProjectId);
   }
 }

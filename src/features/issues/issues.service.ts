@@ -10,6 +10,7 @@ import { SubProject } from '../subProjects/subProjects.entity';
 import { GetProjectIssuesQueryParams } from '../projects/types/projects.types';
 import { IssueUpdate } from '../issueUpdates/issueUpdate.entity';
 import { UpdateIssueDto } from './dtos/updateIssue.dto';
+import { IssueStatusTypes } from './constants/issues.constants';
 
 @Injectable()
 export class IssuesService {
@@ -98,5 +99,43 @@ export class IssuesService {
     updateIssueRequestBody: UpdateIssueDto,
   ) {
     //   await this.issueRepository.update({ updateIssueRequestBody });
+  }
+
+  async getIssueStatusList(subProjectId: number) {
+    const openIssuesCount = await this.issueRepository.count({
+      where: { status: IssueStatusTypes['open'], subProjectId },
+    });
+
+    const inProgressIssuesCount = await this.issueRepository.count({
+      where: { status: IssueStatusTypes['inProgress'], subProjectId },
+    });
+
+    const resolvedIssuesCount = await this.issueRepository.count({
+      where: { status: IssueStatusTypes['resolved'], subProjectId },
+    });
+
+    const pendingIssuesCount = await this.issueRepository.count({
+      where: { status: IssueStatusTypes['pending'], subProjectId },
+    });
+
+    const closedIssuesCount = await this.issueRepository.count({
+      where: { status: IssueStatusTypes['closed'], subProjectId },
+    });
+
+    const totalIssues =
+      openIssuesCount +
+      inProgressIssuesCount +
+      resolvedIssuesCount +
+      pendingIssuesCount +
+      closedIssuesCount;
+
+    return {
+      openIssuesCount,
+      inProgressIssuesCount,
+      resolvedIssuesCount,
+      pendingIssuesCount,
+      closedIssuesCount,
+      totalIssues,
+    };
   }
 }
