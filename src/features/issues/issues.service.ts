@@ -44,14 +44,13 @@ export class IssuesService {
   }
 
   async getIssueDetail(issueId: number, projectId: number) {
-    console.log(projectId);
     const issue = await this.issueRepository
       .createQueryBuilder('issue')
       .leftJoin(User, 'user', 'user.id = issue.assigneeId')
       .leftJoin(
         Member,
         'member',
-        `member.id = issue.assigneeId AND member.projectId = :projectId`,
+        `member.userId = issue.assigneeId AND member.projectId = :projectId`,
         { projectId },
       )
       .select(
@@ -85,7 +84,7 @@ export class IssuesService {
 
     await this.issueUpdateRepository.save({
       issueId: createdIssue.id,
-      createdByUserId: createdIssue.createdByUserId,
+      creatorId: createdIssue.createdByUserId,
       assigneeId: createdIssue.assigneeId,
       newStatus: createdIssue.status,
       updateType: 'create',

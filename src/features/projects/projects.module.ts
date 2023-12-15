@@ -12,6 +12,7 @@ import { Issue } from '../issues/issues.entity';
 import { SubProject } from '../subProjects/subProjects.entity';
 import { SubProjectsService } from '../subProjects/subProjects.service';
 import { IssueUpdate } from '../issueUpdates/issueUpdate.entity';
+import { IssueUpdatesService } from '../issueUpdates/issueUpdate.service';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { IssueUpdate } from '../issueUpdates/issueUpdate.entity';
   ],
   controllers: [ProjectsController],
   providers: [
+    IssueUpdatesService,
     IssuesService,
     SubProjectsService,
     ProjectsService,
