@@ -14,12 +14,12 @@ export class IssueUpdate {
   issueId: number;
 
   @Column()
-  createdByUserId: number;
+  creatorId: number;
 
   @Column({ nullable: true })
   assignerId: number;
 
-  @Column({ nullable: true })
+  @Column()
   assigneeId: number;
 
   @Column({ nullable: true })

@@ -18,6 +18,7 @@ import { IssuesService } from '../issues/issues.service';
 import { GetProjectIssuesQueryParams } from './types/projects.types';
 import { SubProjectsService } from '../subProjects/subProjects.service';
 import { CreateAndEditSubProjectDto } from '../subProjects/dtos/createAndEditSubProjectDto.dto';
+import { IssueUpdatesService } from '../issueUpdates/issueUpdate.service';
 
 @Controller('projects')
 export class ProjectsController {
@@ -26,6 +27,7 @@ export class ProjectsController {
     private readonly membersService: MembersService,
     private readonly issuesService: IssuesService,
     private readonly subProjectsService: SubProjectsService,
+    private readonly issueUpdatesService: IssueUpdatesService,
   ) {}
 
   @Post()
@@ -99,8 +101,13 @@ export class ProjectsController {
     return this.subProjectsService.getSubProjects(projectId);
   }
 
-  @Get('/:projectId/:userId/issues')
-  getProjectIssues(
+  @Get('/:projectId/recent-updates')
+  getProjectRecentUpdates(@Param('projectId', ParseIntPipe) projectId: number) {
+    return this.issueUpdatesService.getProjectRecentUpdates(projectId);
+  }
+
+  @Get('/:projectId/users/:userId/issues')
+  getUserProjectIssues(
     @Query() getProjectIssuesQueryParams: GetProjectIssuesQueryParams,
     @Param('projectId', ParseIntPipe) projectId: number,
     @Param('userId', ParseIntPipe) userId: number,
