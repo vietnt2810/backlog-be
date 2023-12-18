@@ -12,6 +12,7 @@ import { IssueUpdate } from '../issueUpdates/issueUpdate.entity';
 import { UpdateIssueDto } from './dtos/updateIssue.dto';
 import { IssueStatusTypes } from './constants/issues.constants';
 import { MasterIssueType } from '../masterIssueTypes/masterIssueTypes.entity';
+import { Comment } from '../comments/comments.entity';
 
 @Injectable()
 export class IssuesService {
@@ -21,6 +22,8 @@ export class IssuesService {
     private issueRepository: Repository<Issue>,
     @InjectRepository(IssueUpdate)
     private issueUpdateRepository: Repository<IssueUpdate>,
+    @InjectRepository(Comment)
+    private commentRepository: Repository<Comment>,
   ) {}
 
   async getUserProjectIssues(
@@ -115,12 +118,45 @@ export class IssuesService {
     });
   }
 
-  async updateIssue(
-    subProjectId: number,
-    issueId: number,
-    updateIssueRequestBody: UpdateIssueDto,
-  ) {
-    //   await this.issueRepository.update({ updateIssueRequestBody });
+  async updateIssue(issueId: number, updateIssueRequestBody: UpdateIssueDto) {
+    const currentIssueDetail = await this.issueRepository.findOneBy({
+      id: issueId,
+    });
+
+    const { comment, updaterId, ...rest } = updateIssueRequestBody;
+
+    const createdComment = comment
+      ? await this.commentRepository.save({
+          creatorId: updaterId,
+          content: comment,
+        })
+      : undefined;
+
+    await this.issueUpdateRepository.save({
+      issueId: issueId,
+      creatorId: updaterId,
+      assignerId:
+        currentIssueDetail.assigneeId === updateIssueRequestBody.assigneeId
+          ? null
+          : currentIssueDetail.assigneeId,
+      assigneeId:
+        currentIssueDetail.assigneeId === updateIssueRequestBody.assigneeId
+          ? currentIssueDetail.assigneeId
+          : updateIssueRequestBody.assigneeId,
+      oldStatus:
+        currentIssueDetail.status === updateIssueRequestBody.status
+          ? null
+          : currentIssueDetail.status,
+      newStatus:
+        currentIssueDetail.status === updateIssueRequestBody.status
+          ? currentIssueDetail.status
+          : updateIssueRequestBody.status,
+      commentId: createdComment ? createdComment.id : null,
+      updateType: comment ? 'comment' : 'update',
+      subProjectId: currentIssueDetail.subProjectId,
+    });
+
+    await this.issueRepository.update({ id: issueId }, { ...rest });
   }
 
   async getIssueStatusList(subProjectId: number) {

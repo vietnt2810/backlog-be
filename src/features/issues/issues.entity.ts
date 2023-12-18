@@ -5,6 +5,7 @@ import {
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { SubProject } from '../subProjects/subProjects.entity';
 
@@ -57,6 +58,9 @@ export class Issue {
 
   @CreateDateColumn()
   createdAt: Date;
+
+  @UpdateDateColumn()
+  lastUpdatedAt: Date;
 
   @ManyToOne(() => SubProject, {
     onDelete: 'CASCADE',

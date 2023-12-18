@@ -10,9 +10,6 @@ export class UpdateIssueDto {
   @IsNotEmpty()
   assigneeId: number;
 
-  @IsNotEmpty()
-  priority: number;
-
   @IsOptional()
   startDate: string;
 
@@ -26,5 +23,5 @@ export class UpdateIssueDto {
   actualHour: number;
 
   @IsNotEmpty()
-  createdByUserId: number;
+  updaterId: number;
 }
