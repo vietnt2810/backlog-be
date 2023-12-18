@@ -14,6 +14,12 @@ import { UpdateIssueDto } from './dtos/updateIssue.dto';
 @Controller('issues')
 export class IssuesController {
   constructor(private readonly issuesService: IssuesService) {}
+
+  @Get(':issueId')
+  getIssueDetail(@Param('issueId', ParseIntPipe) issueId: number) {
+    return this.issuesService.getIssueDetail(issueId);
+  }
+
   @Post(':subProjectId')
   createIssue(
     @Param('subProjectId', ParseIntPipe) subProjectId: number,
@@ -33,13 +39,5 @@ export class IssuesController {
       issueId,
       updateIssueRequestBody,
     );
-  }
-
-  @Get('/:projectId/:issueId')
-  getIssueDetail(
-    @Param('issueId', ParseIntPipe) issueId: number,
-    @Param('projectId', ParseIntPipe) projectId: number,
-  ) {
-    return this.issuesService.getIssueDetail(issueId, projectId);
   }
 }

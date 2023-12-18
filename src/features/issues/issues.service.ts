@@ -11,6 +11,7 @@ import { GetProjectIssuesQueryParams } from '../projects/types/projects.types';
 import { IssueUpdate } from '../issueUpdates/issueUpdate.entity';
 import { UpdateIssueDto } from './dtos/updateIssue.dto';
 import { IssueStatusTypes } from './constants/issues.constants';
+import { MasterIssueType } from '../masterIssueTypes/masterIssueTypes.entity';
 
 @Injectable()
 export class IssuesService {
@@ -31,31 +32,52 @@ export class IssuesService {
       .createQueryBuilder('issue')
       .leftJoin(SubProject, 'subProject', 'subProject.id = issue.subProjectId')
       .select(
-        'issue.id, issue.issueKey, issue.subject, issue.priority, issue.status, issue.dueDate',
+        'issue.id, issue.subProjectId, issue.issueKey, issue.subject, issue.priority, issue.status, issue.dueDate',
       )
       .where('subProject.projectId = :projectId', { projectId });
 
     if (Number(getProjectIssuesQueryParams.isAssigned) === 1) {
       query.andWhere('issue.assigneeId = :userId', { userId });
     } else {
-      query.andWhere('issue.createdByUserId = :userId', { userId });
+      query.andWhere('issue.creatorId = :userId', { userId });
     }
 
     return query.getRawMany();
   }
 
-  async getIssueDetail(issueId: number, projectId: number) {
-    const issue = await this.issueRepository
+  async getIssueDetail(issueId: number) {
+    const { projectId } = await this.issueRepository
       .createQueryBuilder('issue')
-      .leftJoin(User, 'user', 'user.id = issue.assigneeId')
+      .leftJoin(SubProject, 'subProject', 'subProject.id = issue.subProjectId')
+      .select('subProject.projectId as projectId')
+      .where({ id: issueId })
+      .getRawOne();
+
+    return await this.issueRepository
+      .createQueryBuilder('issue')
+      .leftJoin(
+        MasterIssueType,
+        'masterIssueType',
+        'issue.type = masterIssueType.id',
+      )
+      .leftJoin(User, 'assigneeUser', 'assigneeUser.id = issue.assigneeId')
       .leftJoin(
         Member,
-        'member',
-        `member.userId = issue.assigneeId AND member.projectId = :projectId`,
+        'assigneeMember',
+        `assigneeMember.userId = issue.assigneeId AND assigneeMember.projectId = :projectId`,
         { projectId },
       )
+      .leftJoin(User, 'creatorUser', 'creatorUser.id = issue.creatorId')
+      .leftJoin(
+        Member,
+        'creatorMember',
+        `creatorMember.userId = issue.creatorId AND creatorMember.projectId = :projectId`,
+        {
+          projectId,
+        },
+      )
       .select(
-        'issue.*, user.avatarUrl as assigneeAvatarUrl, member.username as assigneeUsername',
+        'issue.*, masterIssueType.issueType ,assigneeUser.avatarUrl as assigneeAvatarUrl, assigneeMember.username as assigneeUsername, creatorUser.avatarUrl as creatorAvatarUrl, creatorMember.username as creatorUsername',
       )
       .where({ id: issueId })
       .getRawOne();
@@ -85,7 +107,7 @@ export class IssuesService {
 
     await this.issueUpdateRepository.save({
       issueId: createdIssue.id,
-      creatorId: createdIssue.createdByUserId,
+      creatorId: createdIssue.creatorId,
       assigneeId: createdIssue.assigneeId,
       newStatus: createdIssue.status,
       updateType: 'create',
