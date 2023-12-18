@@ -7,6 +7,7 @@ import { SubProject } from '../subProjects/subProjects.entity';
 import { Issue } from '../issues/issues.entity';
 import { User } from '../users/users.entity';
 import { Member } from '../members/members.entity';
+import { Comment } from '../comments/comments.entity';
 
 @Injectable()
 export class IssueUpdatesService {
@@ -81,6 +82,43 @@ export class IssueUpdatesService {
       .select(
         'issueUpdate.id, issueUpdate.issueId, issueUpdate.subProjectId, issueUpdate.oldStatus, issueUpdate.newStatus, issueUpdate.updateType, issueUpdate.createdAt, issue.issueKey, issue.subject as issueSubject, creator.avatarUrl as creatorAvatarUrl, creatorMember.username as creatorUsername, assignerMember.username as assignerUsername, assigneeMember.username as assigneeUsername',
       )
+      .distinct(true)
+      .getRawMany();
+  }
+
+  async getIssueHistory(issueId: number) {
+    const { subProjectId } = await this.issueUpdateRepository.findOneBy({
+      issueId,
+    });
+
+    const { projectId } = await this.subProjectRepository.findOne({
+      where: { id: subProjectId },
+    });
+
+    return await this.issueUpdateRepository
+      .createQueryBuilder('issueUpdate')
+      .leftJoin(User, 'creator', 'creator.id = issueUpdate.creatorId')
+      .leftJoin(
+        Member,
+        'creatorMember',
+        `creatorMember.userId = issueUpdate.creatorId AND creatorMember.projectId = :projectId`,
+        { projectId },
+      )
+      .leftJoin(
+        Member,
+        'assignerMember',
+        'assignerMember.userId = issueUpdate.assignerId',
+      )
+      .leftJoin(
+        Member,
+        'assigneeMember',
+        'assigneeMember.userId = issueUpdate.assigneeId',
+      )
+      .leftJoin(Comment, 'comment', 'comment.id = issueUpdate.commentId')
+      .select(
+        'comment.content, issueUpdate.oldStatus, issueUpdate.newStatus, issueUpdate.updateType, issueUpdate.createdAt, creator.avatarUrl as creatorAvatarUrl, creatorMember.username as creatorUsername, assignerMember.username as assignerUsername, assigneeMember.username as assigneeUsername',
+      )
+      .where({ issueId })
       .distinct(true)
       .getRawMany();
   }

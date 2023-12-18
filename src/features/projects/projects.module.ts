@@ -13,10 +13,12 @@ import { SubProject } from '../subProjects/subProjects.entity';
 import { SubProjectsService } from '../subProjects/subProjects.service';
 import { IssueUpdate } from '../issueUpdates/issueUpdate.entity';
 import { IssueUpdatesService } from '../issueUpdates/issueUpdate.service';
+import { Comment } from '../comments/comments.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
+      Comment,
       IssueUpdate,
       Issue,
       SubProject,

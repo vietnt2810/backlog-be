@@ -34,6 +34,9 @@ export class IssueUpdate {
   @Column()
   subProjectId: number;
 
+  @Column({ nullable: true })
+  commentId: number;
+
   @CreateDateColumn()
   createdAt: Date;
 }
