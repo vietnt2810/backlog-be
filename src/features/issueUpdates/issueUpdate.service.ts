@@ -45,8 +45,9 @@ export class IssueUpdatesService {
       )
       .where('subProject.projectId = :projectId', { projectId })
       .select(
-        'issueUpdate.id, issueUpdate.issueId, issueUpdate.oldStatus, issueUpdate.newStatus, issueUpdate.updateType, issueUpdate.createdAt, issue.issueKey, issue.subject as issueSubject, creator.avatarUrl as creatorAvatarUrl, creatorMember.username as creatorUsername, assignerMember.username as assignerUsername, assigneeMember.username as assigneeUsername',
+        'issueUpdate.id, issueUpdate.issueId, issueUpdate.subProjectId, issueUpdate.oldStatus, issueUpdate.newStatus, issueUpdate.updateType, issueUpdate.createdAt, issue.issueKey, issue.subject as issueSubject, creator.avatarUrl as creatorAvatarUrl, creatorMember.username as creatorUsername, assignerMember.username as assignerUsername, assigneeMember.username as assigneeUsername',
       )
+      .orderBy('issueUpdate.createdAt', 'DESC')
       .distinct(true)
       .getRawMany();
   }
@@ -78,7 +79,7 @@ export class IssueUpdatesService {
       )
       .where({ subProjectId })
       .select(
-        'issueUpdate.id, issueUpdate.issueId, issueUpdate.oldStatus, issueUpdate.newStatus, issueUpdate.updateType, issueUpdate.createdAt, issue.issueKey, issue.subject as issueSubject, creator.avatarUrl as creatorAvatarUrl, creatorMember.username as creatorUsername, assignerMember.username as assignerUsername, assigneeMember.username as assigneeUsername',
+        'issueUpdate.id, issueUpdate.issueId, issueUpdate.subProjectId, issueUpdate.oldStatus, issueUpdate.newStatus, issueUpdate.updateType, issueUpdate.createdAt, issue.issueKey, issue.subject as issueSubject, creator.avatarUrl as creatorAvatarUrl, creatorMember.username as creatorUsername, assignerMember.username as assignerUsername, assigneeMember.username as assigneeUsername',
       )
       .distinct(true)
       .getRawMany();

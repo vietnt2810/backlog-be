@@ -1,5 +1,6 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -49,10 +50,13 @@ export class Issue {
   actualHour: number;
 
   @Column()
-  createdByUserId: number;
+  creatorId: number;
 
   @Column()
   subProjectId: number;
+
+  @CreateDateColumn()
+  createdAt: Date;
 
   @ManyToOne(() => SubProject, {
     onDelete: 'CASCADE',

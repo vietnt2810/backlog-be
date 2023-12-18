@@ -32,5 +32,5 @@ export class CreateIssueDto {
   actualHour: number;
 
   @IsNotEmpty()
-  createdByUserId: number;
+  creatorId: number;
 }
