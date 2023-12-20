@@ -17,10 +17,10 @@ export class UpdateIssueDto {
   dueDate: string;
 
   @IsOptional()
-  estimatedHour: number;
+  estimatedHour: string;
 
   @IsOptional()
-  actualHour: number;
+  actualHour: string;
 
   @IsNotEmpty()
   updaterId: number;

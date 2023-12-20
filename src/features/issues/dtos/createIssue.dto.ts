@@ -26,10 +26,10 @@ export class CreateIssueDto {
   dueDate: string;
 
   @IsOptional()
-  estimatedHour: number;
+  estimatedHour: string;
 
   @IsOptional()
-  actualHour: number;
+  actualHour: string;
 
   @IsNotEmpty()
   creatorId: number;

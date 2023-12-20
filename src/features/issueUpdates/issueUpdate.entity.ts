@@ -28,6 +28,30 @@ export class IssueUpdate {
   @Column()
   newStatus: number;
 
+  @Column({ nullable: true })
+  oldStartDate: string;
+
+  @Column({ nullable: true })
+  newStartDate: string;
+
+  @Column({ nullable: true })
+  oldDueDate: string;
+
+  @Column({ nullable: true })
+  newDueDate: string;
+
+  @Column({ nullable: true })
+  oldEstimatedHour: string;
+
+  @Column({ nullable: true })
+  newEstimatedHour: string;
+
+  @Column({ nullable: true })
+  oldActualHour: string;
+
+  @Column({ nullable: true })
+  newActualHour: string;
+
   @Column()
   updateType: string;
 
