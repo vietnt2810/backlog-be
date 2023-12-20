@@ -45,10 +45,10 @@ export class Issue {
   dueDate: string;
 
   @Column({ nullable: true })
-  estimatedHour: number;
+  estimatedHour: string;
 
   @Column({ nullable: true })
-  actualHour: number;
+  actualHour: string;
 
   @Column()
   creatorId: number;

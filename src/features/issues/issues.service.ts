@@ -80,7 +80,7 @@ export class IssuesService {
         },
       )
       .select(
-        'issue.*, masterIssueType.issueType ,assigneeUser.avatarUrl as assigneeAvatarUrl, assigneeMember.username as assigneeUsername, creatorUser.avatarUrl as creatorAvatarUrl, creatorMember.username as creatorUsername',
+        'issue.*, masterIssueType.issueType, assigneeUser.id as assigneeUserId, assigneeUser.avatarUrl as assigneeAvatarUrl, assigneeMember.username as assigneeUsername, creatorUser.avatarUrl as creatorAvatarUrl, creatorMember.username as creatorUsername',
       )
       .where({ id: issueId })
       .getRawOne();
@@ -113,6 +113,10 @@ export class IssuesService {
       creatorId: createdIssue.creatorId,
       assigneeId: createdIssue.assigneeId,
       newStatus: createdIssue.status,
+      newStartDate: createdIssue.startDate,
+      newDueDate: createdIssue.dueDate,
+      newEstimatedHour: createdIssue.estimatedHour,
+      newActualHour: createdIssue.actualHour,
       updateType: 'create',
       subProjectId,
     });
@@ -122,6 +126,36 @@ export class IssuesService {
     const currentIssueDetail = await this.issueRepository.findOneBy({
       id: issueId,
     });
+
+    const handleUpdateRecord = (currentValue, requestBodyValue) => {
+      if (currentValue === null && currentValue !== requestBodyValue) {
+        return {
+          oldValue: '',
+          newValue: requestBodyValue,
+        };
+      }
+
+      if (currentValue === null && currentValue === requestBodyValue) {
+        return {
+          oldValue: null,
+          newValue: null,
+        };
+      }
+
+      if (currentValue !== null && currentValue !== requestBodyValue) {
+        return {
+          oldValue: currentValue,
+          newValue: requestBodyValue,
+        };
+      }
+
+      if (currentValue !== null && currentValue === requestBodyValue) {
+        return {
+          oldValue: null,
+          newValue: currentValue,
+        };
+      }
+    };
 
     const { comment, updaterId, ...rest } = updateIssueRequestBody;
 
@@ -151,6 +185,38 @@ export class IssuesService {
         currentIssueDetail.status === updateIssueRequestBody.status
           ? currentIssueDetail.status
           : updateIssueRequestBody.status,
+      oldStartDate: handleUpdateRecord(
+        currentIssueDetail.startDate,
+        updateIssueRequestBody.startDate,
+      ).oldValue,
+      newStartDate: handleUpdateRecord(
+        currentIssueDetail.startDate,
+        updateIssueRequestBody.startDate,
+      ).newValue,
+      oldDueDate: handleUpdateRecord(
+        currentIssueDetail.dueDate,
+        updateIssueRequestBody.dueDate,
+      ).oldValue,
+      newDueDate: handleUpdateRecord(
+        currentIssueDetail.dueDate,
+        updateIssueRequestBody.dueDate,
+      ).newValue,
+      oldEstimatedHour: handleUpdateRecord(
+        currentIssueDetail.estimatedHour,
+        updateIssueRequestBody.estimatedHour,
+      ).oldValue,
+      newEstimatedHour: handleUpdateRecord(
+        currentIssueDetail.estimatedHour,
+        updateIssueRequestBody.estimatedHour,
+      ).newValue,
+      oldActualHour: handleUpdateRecord(
+        currentIssueDetail.actualHour,
+        updateIssueRequestBody.actualHour,
+      ).oldValue,
+      newActualHour: handleUpdateRecord(
+        currentIssueDetail.actualHour,
+        updateIssueRequestBody.actualHour,
+      ).newValue,
       commentId: createdComment ? createdComment.id : null,
       updateType: comment ? 'comment' : 'update',
       subProjectId: currentIssueDetail.subProjectId,

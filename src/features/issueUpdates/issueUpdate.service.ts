@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IssueUpdate } from '../issueUpdates/issueUpdate.entity';
-import { Project } from '../projects/projects.entity';
 import { SubProject } from '../subProjects/subProjects.entity';
 import { Issue } from '../issues/issues.entity';
 import { User } from '../users/users.entity';
@@ -116,9 +115,10 @@ export class IssueUpdatesService {
       )
       .leftJoin(Comment, 'comment', 'comment.id = issueUpdate.commentId')
       .select(
-        'comment.content, issueUpdate.oldStatus, issueUpdate.newStatus, issueUpdate.updateType, issueUpdate.createdAt, creator.avatarUrl as creatorAvatarUrl, creatorMember.username as creatorUsername, assignerMember.username as assignerUsername, assigneeMember.username as assigneeUsername',
+        'comment.content, issueUpdate.*, creator.avatarUrl as creatorAvatarUrl, creatorMember.username as creatorUsername, assignerMember.username as assignerUsername, assigneeMember.username as assigneeUsername',
       )
       .where({ issueId })
+      .orderBy('createdAt', 'ASC')
       .distinct(true)
       .getRawMany();
   }
