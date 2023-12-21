@@ -13,11 +13,14 @@ import { UpdateIssueDto } from './dtos/updateIssue.dto';
 import { IssueStatusTypes } from './constants/issues.constants';
 import { MasterIssueType } from '../masterIssueTypes/masterIssueTypes.entity';
 import { Comment } from '../comments/comments.entity';
+import { GetIssuesParams } from '../subProjects/types/subProjects.types';
 
 @Injectable()
 export class IssuesService {
   constructor(
     private subProjectsService: SubProjectsService,
+    @InjectRepository(SubProject)
+    private subProjectRepository: Repository<SubProject>,
     @InjectRepository(Issue)
     private issueRepository: Repository<Issue>,
     @InjectRepository(IssueUpdate)
@@ -84,6 +87,84 @@ export class IssuesService {
       )
       .where({ id: issueId })
       .getRawOne();
+  }
+
+  async getIssues(subProjectId: number, getIssuesParams?: GetIssuesParams) {
+    const { projectId } = await this.subProjectRepository.findOne({
+      where: { id: subProjectId },
+    });
+
+    const data = await this.issueRepository
+      .createQueryBuilder('issue')
+      .leftJoin(
+        MasterIssueType,
+        'masterIssueType',
+        'issue.type = masterIssueType.id',
+      )
+      .leftJoin(User, 'creatorUser', 'issue.creatorId = creatorUser.id')
+      .leftJoin(
+        Member,
+        'creatorMember',
+        'issue.creatorId = creatorMember.userId AND creatorMember.projectId = :projectId',
+        { projectId },
+      )
+      .leftJoin(User, 'assigneeUser', 'issue.assigneeId = assigneeUser.id')
+      .leftJoin(
+        Member,
+        'assigneeMember',
+        'issue.assigneeId = assigneeMember.userId AND assigneeMember.projectId = :projectId',
+        { projectId },
+      )
+      .select(
+        'issue.*, masterIssueType.issueType, creatorUser.avatarUrl as creatorAvatarUrl, creatorMember.username as creatorUsername, assigneeUser.avatarUrl as assigneeAvatarUrl, assigneeMember.username as assigneeUsername',
+      )
+      .where({
+        subProjectId,
+      })
+      .orderBy('lastUpdatedAt', 'DESC')
+      .getRawMany();
+
+    let resultData = data;
+
+    // query with keyword
+    getIssuesParams.keyword &&
+      (resultData = data.filter(
+        (item) =>
+          item.issueKey
+            .toLowerCase()
+            .includes(getIssuesParams.keyword.toLowerCase()) ||
+          item.subject
+            .toLowerCase()
+            .includes(getIssuesParams.keyword.toLowerCase()),
+      ));
+    // query with issue status
+    getIssuesParams.status &&
+      resultData.length &&
+      (resultData = resultData.filter(
+        (item) => item.status === Number(getIssuesParams.status),
+      ));
+    // query with issue type
+    getIssuesParams.type &&
+      resultData.length &&
+      (resultData = resultData.filter(
+        (item) => item.type === Number(getIssuesParams.type),
+      ));
+    // query with assignee
+    getIssuesParams.assigneeId &&
+      resultData.length &&
+      (resultData = resultData.filter(
+        (item) => item.assigneeId === Number(getIssuesParams.assigneeId),
+      ));
+
+    return {
+      data: resultData
+        .slice(((getIssuesParams.page ? getIssuesParams.page : 1) - 1) * 20)
+        .slice(0, getIssuesParams.perPage ? getIssuesParams.perPage : 20),
+      meta: {
+        page: getIssuesParams.page ? getIssuesParams.page : 1,
+        totalRecord: resultData.length,
+      },
+    };
   }
 
   async createIssue(
