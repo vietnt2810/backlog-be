@@ -81,6 +81,7 @@ export class IssueUpdatesService {
       .select(
         'issueUpdate.id, issueUpdate.issueId, issueUpdate.subProjectId, issueUpdate.oldStatus, issueUpdate.newStatus, issueUpdate.updateType, issueUpdate.createdAt, issue.issueKey, issue.subject as issueSubject, creator.avatarUrl as creatorAvatarUrl, creatorMember.username as creatorUsername, assignerMember.username as assignerUsername, assigneeMember.username as assigneeUsername',
       )
+      .orderBy('issueUpdate.createdAt', 'DESC')
       .distinct(true)
       .getRawMany();
   }
