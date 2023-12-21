@@ -201,6 +201,8 @@ export class IssuesService {
       updateType: 'create',
       subProjectId,
     });
+
+    return createdIssue;
   }
 
   async updateIssue(issueId: number, updateIssueRequestBody: UpdateIssueDto) {

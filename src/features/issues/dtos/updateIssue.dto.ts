@@ -2,6 +2,18 @@ import { IsNotEmpty, IsOptional } from 'class-validator';
 
 export class UpdateIssueDto {
   @IsOptional()
+  type: number;
+
+  @IsOptional()
+  subject: string;
+
+  @IsOptional()
+  description: string;
+
+  @IsOptional()
+  priority: number;
+
+  @IsOptional()
   comment: string;
 
   @IsNotEmpty()
