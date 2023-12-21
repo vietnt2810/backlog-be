@@ -157,7 +157,7 @@ export class IssuesService {
       ));
 
     return {
-      issues: resultData
+      data: resultData
         .slice(((getIssuesParams.page ? getIssuesParams.page : 1) - 1) * 20)
         .slice(0, getIssuesParams.perPage ? getIssuesParams.perPage : 20),
       meta: {
