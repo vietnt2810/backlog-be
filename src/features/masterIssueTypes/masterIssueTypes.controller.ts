@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -27,5 +28,12 @@ export class MasterIssueTypesController {
   @Get(':projectId')
   getMasterIssueTypes(@Param('projectId', ParseIntPipe) projectId: number) {
     return this.masterIssueTypesService.getMasterIssueTypes(projectId);
+  }
+
+  @Delete(':issueTypeId')
+  deleteMasterIssueType(
+    @Param('issueTypeId', ParseIntPipe) issueTypeId: number,
+  ) {
+    return this.masterIssueTypesService.deleteMasterIssueType(issueTypeId);
   }
 }
