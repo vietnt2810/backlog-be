@@ -34,7 +34,12 @@ export class MasterIssueTypesService {
       select: {
         id: true,
         issueType: true,
+        isCommon: true,
       },
     });
+  }
+
+  async deleteMasterIssueType(issueTypeId: number) {
+    return await this.masterIssueTypeRepository.delete({ id: issueTypeId });
   }
 }
