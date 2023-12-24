@@ -1,5 +1,6 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -24,6 +25,9 @@ export class Member {
 
   @Column()
   role: number;
+
+  @CreateDateColumn()
+  joinedDate: Date;
 
   @ManyToOne(() => User)
   @JoinColumn()

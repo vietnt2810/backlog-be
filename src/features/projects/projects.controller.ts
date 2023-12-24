@@ -15,7 +15,10 @@ import { AddMemberDto } from '../members/dtos/addMember.dto';
 import { CreateEditProjectDto } from './dtos/createProject.dto';
 import { ChangeMemberNameDto } from '../members/dtos/changeMemberName.dto';
 import { IssuesService } from '../issues/issues.service';
-import { GetProjectIssuesQueryParams } from './types/projects.types';
+import {
+  GetMembersQueryParams,
+  GetProjectIssuesQueryParams,
+} from './types/projects.types';
 import { SubProjectsService } from '../subProjects/subProjects.service';
 import { CreateAndEditSubProjectDto } from '../subProjects/dtos/createAndEditSubProjectDto.dto';
 import { IssueUpdatesService } from '../issueUpdates/issueUpdate.service';
@@ -49,8 +52,11 @@ export class ProjectsController {
   }
 
   @Get(':projectId/members')
-  getMembers(@Param('projectId', ParseIntPipe) projectId: number) {
-    return this.membersService.getMembers(projectId);
+  getMembers(
+    @Param('projectId', ParseIntPipe) projectId: number,
+    @Query() getMembersQueryParams: GetMembersQueryParams,
+  ) {
+    return this.membersService.getMembers(projectId, getMembersQueryParams);
   }
 
   @Get(':projectId/members/:memberId')
@@ -83,6 +89,14 @@ export class ProjectsController {
       memberId,
       changeMemberNameRequestBody,
     );
+  }
+
+  @Delete(':projectId/members/:memberId')
+  deleteMember(
+    @Param('projectId', ParseIntPipe) projectId: number,
+    @Param('memberId', ParseIntPipe) memberId: number,
+  ) {
+    return this.membersService.deleteMember(projectId, memberId);
   }
 
   @Post(':projectId/sub-projects')
