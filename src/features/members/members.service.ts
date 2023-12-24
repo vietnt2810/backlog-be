@@ -10,6 +10,7 @@ import { AddMemberDto } from './dtos/addMember.dto';
 import { UsersService } from '../users/users.service';
 import { isEmpty } from 'lodash';
 import { ChangeMemberNameDto } from './dtos/changeMemberName.dto';
+import { GetMembersQueryParams } from '../projects/types/projects.types';
 
 @Injectable()
 export class MembersService {
@@ -76,8 +77,15 @@ export class MembersService {
     );
   }
 
-  async getMembers(projectId: number) {
-    return await this.memberRepository.find({
+  async deleteMember(projectId: number, memberId: number) {
+    return await this.memberRepository.delete({ userId: memberId, projectId });
+  }
+
+  async getMembers(
+    projectId: number,
+    getMembersQueryParams?: GetMembersQueryParams,
+  ) {
+    const data = await this.memberRepository.find({
       where: {
         projectId,
       },
@@ -92,8 +100,40 @@ export class MembersService {
         userId: true,
         username: true,
         role: true,
+        joinedDate: true,
       },
     });
+
+    let resultData = data;
+
+    getMembersQueryParams.keyword &&
+      (resultData = data.filter((member) =>
+        member.username
+          .toLowerCase()
+          .includes(getMembersQueryParams.keyword.toLowerCase()),
+      ));
+
+    getMembersQueryParams.role &&
+      (resultData = resultData.filter(
+        (member) => member.role === Number(getMembersQueryParams.role),
+      ));
+
+    return {
+      data: resultData
+        .slice(
+          ((getMembersQueryParams.page ? getMembersQueryParams.page : 1) - 1) *
+            20,
+        )
+        .slice(
+          0,
+          getMembersQueryParams.perPage ? getMembersQueryParams.perPage : 20,
+        ),
+      meta: {
+        page: getMembersQueryParams.page ? getMembersQueryParams.page : 1,
+        totalRecord: resultData.length,
+        totalMember: data.length,
+      },
+    };
   }
 
   async getMemberDetail(projectId: number, memberId: number) {

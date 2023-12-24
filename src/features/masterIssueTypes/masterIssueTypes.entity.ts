@@ -25,5 +25,5 @@ export class MasterIssueType {
     onDelete: 'CASCADE',
   })
   @JoinColumn()
-  subProject: Project;
+  project: Project;
 }
