@@ -2,8 +2,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Issue } from '../issues/issues.entity';
 
 @Entity()
 export class IssueUpdate {
@@ -63,4 +66,10 @@ export class IssueUpdate {
 
   @CreateDateColumn()
   createdAt: Date;
+
+  @ManyToOne(() => Issue, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn()
+  issue: Issue;
 }
