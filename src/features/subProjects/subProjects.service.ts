@@ -24,7 +24,7 @@ export class SubProjectsService {
   async getSubProjectDetail(subProjectId: number) {
     return await this.subProjectRepository.findOne({
       where: { id: subProjectId },
-      select: { subProjectName: true, subTitle: true },
+      select: { projectId: true, subProjectName: true, subTitle: true },
     });
   }
 
@@ -53,5 +53,9 @@ export class SubProjectsService {
         ...changeSubProjectNameRequestBody,
       },
     );
+  }
+
+  async deleteSubProject(subProjectId: number) {
+    return await this.subProjectRepository.delete({ id: subProjectId });
   }
 }

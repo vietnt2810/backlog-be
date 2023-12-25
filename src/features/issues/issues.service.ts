@@ -14,6 +14,7 @@ import { IssueStatusTypes } from './constants/issues.constants';
 import { MasterIssueType } from '../masterIssueTypes/masterIssueTypes.entity';
 import { Comment } from '../comments/comments.entity';
 import { GetIssuesParams } from '../subProjects/types/subProjects.types';
+import { Notification } from '../notifications/notifications.entity';
 
 @Injectable()
 export class IssuesService {
@@ -27,6 +28,8 @@ export class IssuesService {
     private issueUpdateRepository: Repository<IssueUpdate>,
     @InjectRepository(Comment)
     private commentRepository: Repository<Comment>,
+    @InjectRepository(Notification)
+    private notificationRepository: Repository<Notification>,
   ) {}
 
   async getUserProjectIssues(
@@ -189,7 +192,7 @@ export class IssuesService {
       }`,
     });
 
-    await this.issueUpdateRepository.save({
+    const createdIssueUpdate = await this.issueUpdateRepository.save({
       issueId: createdIssue.id,
       creatorId: createdIssue.creatorId,
       assigneeId: createdIssue.assigneeId,
@@ -202,12 +205,24 @@ export class IssuesService {
       subProjectId,
     });
 
+    await this.notificationRepository.save({
+      projectId: subProject.projectId,
+      userId: createdIssueUpdate.assigneeId,
+      issueUpdateId: createdIssueUpdate.id,
+    });
+
     return createdIssue;
   }
 
   async updateIssue(issueId: number, updateIssueRequestBody: UpdateIssueDto) {
     const currentIssueDetail = await this.issueRepository.findOneBy({
       id: issueId,
+    });
+
+    const { projectId } = await this.subProjectRepository.findOne({
+      where: {
+        id: currentIssueDetail.subProjectId,
+      },
     });
 
     const handleUpdateRecord = (currentValue, requestBodyValue) => {
@@ -249,7 +264,7 @@ export class IssuesService {
         })
       : undefined;
 
-    await this.issueUpdateRepository.save({
+    const createdIssueUpdate = await this.issueUpdateRepository.save({
       issueId: issueId,
       creatorId: updaterId,
       assignerId:
@@ -303,6 +318,12 @@ export class IssuesService {
       commentId: createdComment ? createdComment.id : null,
       updateType: comment ? 'comment' : 'update',
       subProjectId: currentIssueDetail.subProjectId,
+    });
+
+    await this.notificationRepository.save({
+      projectId: projectId,
+      userId: updateIssueRequestBody.assigneeId,
+      issueUpdateId: createdIssueUpdate.id,
     });
 
     await this.issueRepository.update({ id: issueId }, { ...rest });

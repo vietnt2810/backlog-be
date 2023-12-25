@@ -15,6 +15,7 @@ import { MasterIssueTypesModule } from './features/masterIssueTypes/masterIssueT
 import { Issue } from './features/issues/issues.entity';
 import { MasterIssueType } from './features/masterIssueTypes/masterIssueTypes.entity';
 import { IssuesModule } from './features/issues/issues.module';
+import { Notification } from './features/notifications/notifications.entity';
 
 @Module({
   imports: [
@@ -27,7 +28,15 @@ import { IssuesModule } from './features/issues/issues.module';
       username: 'root',
       password: '1234',
       database: 'backlog',
-      entities: [User, Project, Member, SubProject, Issue, MasterIssueType],
+      entities: [
+        User,
+        Project,
+        Member,
+        SubProject,
+        Issue,
+        MasterIssueType,
+        Notification,
+      ],
       autoLoadEntities: true,
       synchronize: true,
     }),

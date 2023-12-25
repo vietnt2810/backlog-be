@@ -22,6 +22,7 @@ import {
 import { SubProjectsService } from '../subProjects/subProjects.service';
 import { CreateAndEditSubProjectDto } from '../subProjects/dtos/createAndEditSubProjectDto.dto';
 import { IssueUpdatesService } from '../issueUpdates/issueUpdate.service';
+import { NotificationsService } from '../notifications/notifications.service';
 
 @Controller('projects')
 export class ProjectsController {
@@ -31,6 +32,7 @@ export class ProjectsController {
     private readonly issuesService: IssuesService,
     private readonly subProjectsService: SubProjectsService,
     private readonly issueUpdatesService: IssueUpdatesService,
+    private readonly notificationsService: NotificationsService,
   ) {}
 
   @Post()
@@ -115,12 +117,12 @@ export class ProjectsController {
     return this.subProjectsService.getSubProjects(projectId);
   }
 
-  @Get('/:projectId/recent-updates')
+  @Get(':projectId/recent-updates')
   getProjectRecentUpdates(@Param('projectId', ParseIntPipe) projectId: number) {
     return this.issueUpdatesService.getProjectRecentUpdates(projectId);
   }
 
-  @Get('/:projectId/users/:userId/issues')
+  @Get(':projectId/users/:userId/issues')
   getUserProjectIssues(
     @Query() getProjectIssuesQueryParams: GetProjectIssuesQueryParams,
     @Param('projectId', ParseIntPipe) projectId: number,
@@ -131,5 +133,20 @@ export class ProjectsController {
       userId,
       getProjectIssuesQueryParams,
     );
+  }
+
+  @Get(':projectId/users/:userId/notifications')
+  getNotifications(
+    @Param('projectId', ParseIntPipe) projectId: number,
+    @Param('userId', ParseIntPipe) userId: number,
+  ) {
+    return this.notificationsService.getNotifications(projectId, userId);
+  }
+
+  @Put('notifications/:notificationId')
+  updateReadNotification(
+    @Param('notificationId', ParseIntPipe) notificationId: number,
+  ) {
+    return this.notificationsService.updateReadNotification(notificationId);
   }
 }

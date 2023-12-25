@@ -14,10 +14,13 @@ import { SubProjectsService } from '../subProjects/subProjects.service';
 import { IssueUpdate } from '../issueUpdates/issueUpdate.entity';
 import { IssueUpdatesService } from '../issueUpdates/issueUpdate.service';
 import { Comment } from '../comments/comments.entity';
+import { Notification } from '../notifications/notifications.entity';
+import { NotificationsService } from '../notifications/notifications.service';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
+      Notification,
       Comment,
       IssueUpdate,
       Issue,
@@ -29,6 +32,7 @@ import { Comment } from '../comments/comments.entity';
   ],
   controllers: [ProjectsController],
   providers: [
+    NotificationsService,
     IssueUpdatesService,
     IssuesService,
     SubProjectsService,

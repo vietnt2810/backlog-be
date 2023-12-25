@@ -14,10 +14,12 @@ import { IssueUpdate } from '../issueUpdates/issueUpdate.entity';
 import { Issue } from '../issues/issues.entity';
 import { IssuesService } from '../issues/issues.service';
 import { Comment } from '../comments/comments.entity';
+import { Notification } from '../notifications/notifications.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
+      Notification,
       Comment,
       IssueUpdate,
       Issue,
