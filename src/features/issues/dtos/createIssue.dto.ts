@@ -33,4 +33,7 @@ export class CreateIssueDto {
 
   @IsNotEmpty()
   creatorId: number;
+
+  @IsOptional()
+  attachedFile: string[];
 }

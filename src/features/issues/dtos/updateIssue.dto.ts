@@ -36,4 +36,7 @@ export class UpdateIssueDto {
 
   @IsNotEmpty()
   updaterId: number;
+
+  @IsOptional()
+  attachedFile: any[];
 }

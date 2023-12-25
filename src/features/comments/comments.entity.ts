@@ -16,6 +16,9 @@ export class Comment {
   @Column()
   content: string;
 
+  @Column({ nullable: true, type: 'json' })
+  attachedFile: string[];
+
   @CreateDateColumn()
   createdAt: string;
 }
