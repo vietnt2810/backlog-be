@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -23,14 +24,14 @@ export class SubProjectsController {
     private readonly issuesService: IssuesService,
   ) {}
 
-  @Get('/:subProjectId')
+  @Get(':subProjectId')
   getSubProjectDetail(
     @Param('subProjectId', ParseIntPipe) subProjectId: number,
   ) {
     return this.subProjectsService.getSubProjectDetail(subProjectId);
   }
 
-  @Put('/:subProjectId')
+  @Put(':subProjectId')
   changeSubProjectName(
     @Param('subProjectId', ParseIntPipe) subProjectId: number,
     @Body() changeSubProjectNameRequestBody: CreateAndEditSubProjectDto,
@@ -41,14 +42,19 @@ export class SubProjectsController {
     );
   }
 
-  @Get('/:subProjectId/recent-updates')
+  @Delete(':subProjectId')
+  deleteSubProject(@Param('subProjectId', ParseIntPipe) subProjectId: number) {
+    this.subProjectsService.deleteSubProject(subProjectId);
+  }
+
+  @Get(':subProjectId/recent-updates')
   getSubProjectRecentUpdates(
     @Param('subProjectId', ParseIntPipe) subProjectId: number,
   ) {
     return this.issueUpdatesService.getSubProjectRecentUpdates(subProjectId);
   }
 
-  @Get('/:subProjectId/issue-status')
+  @Get(':subProjectId/issue-status')
   getSubProjectIssueStatusList(
     @Param('subProjectId', ParseIntPipe) subProjectId: number,
   ) {
