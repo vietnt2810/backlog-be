@@ -56,7 +56,7 @@ export class Issue {
   @Column()
   subProjectId: number;
 
-  @Column({ type: 'json' })
+  @Column({ type: 'json', default: null })
   attachedFile: any[];
 
   @CreateDateColumn()

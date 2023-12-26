@@ -116,7 +116,7 @@ export class IssueUpdatesService {
       )
       .leftJoin(Comment, 'comment', 'comment.id = issueUpdate.commentId')
       .select(
-        'comment.content, issueUpdate.*, creator.avatarUrl as creatorAvatarUrl, creatorMember.username as creatorUsername, assignerMember.username as assignerUsername, assigneeMember.username as assigneeUsername',
+        'comment.content, comment.attachedFile, issueUpdate.*, creator.avatarUrl as creatorAvatarUrl, creatorMember.username as creatorUsername, assignerMember.username as assignerUsername, assigneeMember.username as assigneeUsername',
       )
       .where({ issueId })
       .orderBy('createdAt', 'ASC')

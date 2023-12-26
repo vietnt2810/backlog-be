@@ -255,14 +255,17 @@ export class IssuesService {
       }
     };
 
-    const { comment, updaterId, ...rest } = updateIssueRequestBody;
+    const { comment, updaterId, attachedFile, ...rest } =
+      updateIssueRequestBody;
 
-    const createdComment = comment
-      ? await this.commentRepository.save({
-          creatorId: updaterId,
-          content: comment,
-        })
-      : undefined;
+    const createdComment =
+      comment === undefined || (!comment && attachedFile === undefined)
+        ? undefined
+        : await this.commentRepository.save({
+            creatorId: updaterId,
+            content: comment,
+            attachedFile,
+          });
 
     const createdIssueUpdate = await this.issueUpdateRepository.save({
       issueId: issueId,
@@ -326,7 +329,10 @@ export class IssuesService {
       issueUpdateId: createdIssueUpdate.id,
     });
 
-    await this.issueRepository.update({ id: issueId }, { ...rest });
+    await this.issueRepository.update(
+      { id: issueId },
+      { ...rest, attachedFile: createdComment ? undefined : attachedFile },
+    );
   }
 
   async getIssueStatusList(subProjectId: number) {

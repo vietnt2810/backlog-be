@@ -13,11 +13,11 @@ export class Comment {
   @Column()
   creatorId: number;
 
-  @Column()
+  @Column({ default: null })
   content: string;
 
-  @Column({ nullable: true, type: 'json' })
-  attachedFile: string[];
+  @Column({ default: null, type: 'json' })
+  attachedFile: any[];
 
   @CreateDateColumn()
   createdAt: string;
