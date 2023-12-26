@@ -15,7 +15,7 @@ export class NotificationsService {
   ) {}
 
   async getNotifications(projectId: number, userId: number) {
-    const data = await this.notificationRepository
+    return await this.notificationRepository
       .createQueryBuilder('notification')
       .leftJoin(
         IssueUpdate,
@@ -36,8 +36,6 @@ export class NotificationsService {
       .orderBy('createdAt', 'DESC')
       .distinct(true)
       .getRawMany();
-
-    return data;
   }
 
   async updateReadNotification(notificationId: number) {

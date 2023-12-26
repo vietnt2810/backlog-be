@@ -23,6 +23,8 @@ import { SubProjectsService } from '../subProjects/subProjects.service';
 import { CreateAndEditSubProjectDto } from '../subProjects/dtos/createAndEditSubProjectDto.dto';
 import { IssueUpdatesService } from '../issueUpdates/issueUpdate.service';
 import { NotificationsService } from '../notifications/notifications.service';
+import { ViewHistoryService } from '../viewHistory/viewHistory.service';
+import { UpdateRecentlyViewedIssuesDto } from './dtos/updateRecentlyViewedIssues.dto';
 
 @Controller('projects')
 export class ProjectsController {
@@ -33,6 +35,7 @@ export class ProjectsController {
     private readonly subProjectsService: SubProjectsService,
     private readonly issueUpdatesService: IssueUpdatesService,
     private readonly notificationsService: NotificationsService,
+    private readonly viewHistoryService: ViewHistoryService,
   ) {}
 
   @Post()
@@ -148,5 +151,27 @@ export class ProjectsController {
     @Param('notificationId', ParseIntPipe) notificationId: number,
   ) {
     return this.notificationsService.updateReadNotification(notificationId);
+  }
+
+  @Get(':projectId/users/:userId/recently-viewed')
+  getRecentlyViewedIssues(
+    @Param('projectId', ParseIntPipe) projectId: number,
+    @Param('userId', ParseIntPipe) userId: number,
+  ) {
+    return this.viewHistoryService.getRecentlyViewedIssues(projectId, userId);
+  }
+
+  @Put(':projectId/users/:userId/recently-viewed')
+  updateRecentlyViewedIssues(
+    @Param('projectId', ParseIntPipe) projectId: number,
+    @Param('userId', ParseIntPipe) userId: number,
+    @Body()
+    updateRecentlyViewedIssuesRequestBody: UpdateRecentlyViewedIssuesDto,
+  ) {
+    return this.viewHistoryService.updateRecentlyViewedIssues(
+      projectId,
+      userId,
+      updateRecentlyViewedIssuesRequestBody,
+    );
   }
 }

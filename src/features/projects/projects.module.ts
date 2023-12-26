@@ -16,10 +16,13 @@ import { IssueUpdatesService } from '../issueUpdates/issueUpdate.service';
 import { Comment } from '../comments/comments.entity';
 import { Notification } from '../notifications/notifications.entity';
 import { NotificationsService } from '../notifications/notifications.service';
+import { ViewHistoryService } from '../viewHistory/viewHistory.service';
+import { ViewHistory } from '../viewHistory/viewHistory.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
+      ViewHistory,
       Notification,
       Comment,
       IssueUpdate,
@@ -32,6 +35,7 @@ import { NotificationsService } from '../notifications/notifications.service';
   ],
   controllers: [ProjectsController],
   providers: [
+    ViewHistoryService,
     NotificationsService,
     IssueUpdatesService,
     IssuesService,
