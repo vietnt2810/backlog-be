@@ -2,7 +2,7 @@ import { IsNotEmpty, IsOptional } from 'class-validator';
 
 export class CreateIssueDto {
   @IsNotEmpty()
-  type: number;
+  issueTypeId: number;
 
   @IsNotEmpty()
   subject: string;
