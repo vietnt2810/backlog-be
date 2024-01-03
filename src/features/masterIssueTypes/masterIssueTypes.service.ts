@@ -3,6 +3,7 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MasterIssueType } from './masterIssueTypes.entity';
 import { CreateMasterIssueTypeDto } from './dtos/createMasterIssueType.dto';
+import { UpdateMasterIssueTypeDto } from './dtos/updateMasterIssueType.dto';
 
 @Injectable()
 export class MasterIssueTypesService {
@@ -37,6 +38,35 @@ export class MasterIssueTypesService {
         isCommon: true,
       },
     });
+  }
+
+  async getMasterIssueType(issueTypeId: number) {
+    return await this.masterIssueTypeRepository.findOne({
+      where: { id: issueTypeId },
+      select: { issueType: true, color: true },
+    });
+  }
+
+  async updateMasterIssueType(
+    issueTypeId: number,
+    updateMasterIssueTypeRequestBody: UpdateMasterIssueTypeDto,
+  ) {
+    const masterIssueType = await this.masterIssueTypeRepository.findOneBy({
+      projectId: updateMasterIssueTypeRequestBody.projectId,
+      issueType: updateMasterIssueTypeRequestBody.issueType,
+    });
+
+    if (masterIssueType && masterIssueType.id !== issueTypeId) {
+      throw new BadRequestException('This type is already added');
+    }
+
+    return await this.masterIssueTypeRepository.update(
+      { id: issueTypeId },
+      {
+        issueType: updateMasterIssueTypeRequestBody.issueType,
+        color: updateMasterIssueTypeRequestBody.color,
+      },
+    );
   }
 
   async deleteMasterIssueType(issueTypeId: number) {

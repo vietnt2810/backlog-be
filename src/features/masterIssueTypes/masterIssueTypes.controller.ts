@@ -6,9 +6,11 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Put,
 } from '@nestjs/common';
 import { MasterIssueTypesService } from './masterIssueTypes.service';
 import { CreateMasterIssueTypeDto } from './dtos/createMasterIssueType.dto';
+import { UpdateMasterIssueTypeDto } from './dtos/updateMasterIssueType.dto';
 
 @Controller('master-issues')
 export class MasterIssueTypesController {
@@ -25,9 +27,26 @@ export class MasterIssueTypesController {
     );
   }
 
-  @Get(':projectId')
+  @Get('projects/:projectId')
   getMasterIssueTypes(@Param('projectId', ParseIntPipe) projectId: number) {
     return this.masterIssueTypesService.getMasterIssueTypes(projectId);
+  }
+
+  @Get(':issueTypeId')
+  getMasterIssueType(@Param('issueTypeId', ParseIntPipe) issueTypeId: number) {
+    return this.masterIssueTypesService.getMasterIssueType(issueTypeId);
+  }
+
+  @Put(':issueTypeId')
+  updateMasterIssueType(
+    @Body() updateMasterIssueTypeRequestBody: UpdateMasterIssueTypeDto,
+
+    @Param('issueTypeId', ParseIntPipe) issueTypeId: number,
+  ) {
+    return this.masterIssueTypesService.updateMasterIssueType(
+      issueTypeId,
+      updateMasterIssueTypeRequestBody,
+    );
   }
 
   @Delete(':issueTypeId')
