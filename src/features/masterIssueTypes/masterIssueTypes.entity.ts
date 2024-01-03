@@ -15,6 +15,9 @@ export class MasterIssueType {
   @Column()
   issueType: string;
 
+  @Column({ default: '#f42858' })
+  color: string;
+
   @Column({ default: null, nullable: true })
   projectId: number;
 

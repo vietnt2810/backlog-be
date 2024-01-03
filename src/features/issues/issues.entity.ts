@@ -8,6 +8,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { SubProject } from '../subProjects/subProjects.entity';
+import { MasterIssueType } from '../masterIssueTypes/masterIssueTypes.entity';
 
 @Entity()
 export class Issue {
@@ -21,7 +22,7 @@ export class Issue {
   issueKey: string;
 
   @Column()
-  type: number;
+  issueTypeId: number;
 
   @Column()
   subject: string;
@@ -70,4 +71,10 @@ export class Issue {
   })
   @JoinColumn()
   subProject: SubProject;
+
+  @ManyToOne(() => MasterIssueType, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn()
+  issueType: MasterIssueType;
 }

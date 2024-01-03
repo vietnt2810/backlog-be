@@ -67,7 +67,7 @@ export class IssuesService {
       .leftJoin(
         MasterIssueType,
         'masterIssueType',
-        'issue.type = masterIssueType.id',
+        'issue.issueTypeId = masterIssueType.id',
       )
       .leftJoin(User, 'assigneeUser', 'assigneeUser.id = issue.assigneeId')
       .leftJoin(
@@ -86,7 +86,7 @@ export class IssuesService {
         },
       )
       .select(
-        'issue.*, masterIssueType.issueType, assigneeUser.id as assigneeUserId, assigneeUser.avatarUrl as assigneeAvatarUrl, assigneeMember.username as assigneeUsername, creatorUser.avatarUrl as creatorAvatarUrl, creatorMember.username as creatorUsername',
+        'issue.*, masterIssueType.issueType, masterIssueType.color as issueTypeColor, assigneeUser.id as assigneeUserId, assigneeUser.avatarUrl as assigneeAvatarUrl, assigneeMember.username as assigneeUsername, creatorUser.avatarUrl as creatorAvatarUrl, creatorMember.username as creatorUsername',
       )
       .where({ id: issueId })
       .getRawOne();
@@ -102,7 +102,7 @@ export class IssuesService {
       .leftJoin(
         MasterIssueType,
         'masterIssueType',
-        'issue.type = masterIssueType.id',
+        'issue.issueTypeId = masterIssueType.id',
       )
       .leftJoin(User, 'creatorUser', 'issue.creatorId = creatorUser.id')
       .leftJoin(
@@ -119,7 +119,7 @@ export class IssuesService {
         { projectId },
       )
       .select(
-        'issue.*, masterIssueType.issueType, creatorUser.avatarUrl as creatorAvatarUrl, creatorMember.username as creatorUsername, assigneeUser.avatarUrl as assigneeAvatarUrl, assigneeMember.username as assigneeUsername',
+        'issue.*, masterIssueType.issueType, masterIssueType.color as issueTypeColor, creatorUser.avatarUrl as creatorAvatarUrl, creatorMember.username as creatorUsername, assigneeUser.avatarUrl as assigneeAvatarUrl, assigneeMember.username as assigneeUsername',
       )
       .where({
         subProjectId,
