@@ -11,6 +11,7 @@ import { UsersService } from '../users/users.service';
 import { isEmpty } from 'lodash';
 import { ChangeMemberNameDto } from './dtos/changeMemberName.dto';
 import { GetMembersQueryParams } from '../projects/types/projects.types';
+import { ChangeMemberRoleDto } from './dtos/changeMemberRole.dto';
 
 @Injectable()
 export class MembersService {
@@ -84,6 +85,17 @@ export class MembersService {
     this.memberRepository.update(
       { userId: memberId, projectId },
       { username: changeMemberNameRequestBody.memberName },
+    );
+  }
+
+  async changeMemberRole(
+    projectId: number,
+    memberId: number,
+    changeMemberRoleRequestBody: ChangeMemberRoleDto,
+  ) {
+    this.memberRepository.update(
+      { userId: memberId, projectId },
+      { role: changeMemberRoleRequestBody.role },
     );
   }
 

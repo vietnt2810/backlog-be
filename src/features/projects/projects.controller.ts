@@ -25,6 +25,7 @@ import { IssueUpdatesService } from '../issueUpdates/issueUpdate.service';
 import { NotificationsService } from '../notifications/notifications.service';
 import { ViewHistoryService } from '../viewHistory/viewHistory.service';
 import { UpdateRecentlyViewedIssuesDto } from './dtos/updateRecentlyViewedIssues.dto';
+import { ChangeMemberRoleDto } from '../members/dtos/changeMemberRole.dto';
 
 @Controller('projects')
 export class ProjectsController {
@@ -93,6 +94,19 @@ export class ProjectsController {
       projectId,
       memberId,
       changeMemberNameRequestBody,
+    );
+  }
+
+  @Put(':projectId/members/:memberId/change-role')
+  changeMemberRole(
+    @Param('projectId', ParseIntPipe) projectId: number,
+    @Param('memberId', ParseIntPipe) memberId: number,
+    @Body() changeMemberRoleRequestBody: ChangeMemberRoleDto,
+  ) {
+    return this.membersService.changeMemberRole(
+      projectId,
+      memberId,
+      changeMemberRoleRequestBody,
     );
   }
 
