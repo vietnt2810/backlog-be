@@ -86,7 +86,7 @@ export class IssuesService {
         },
       )
       .select(
-        'issue.*, masterIssueType.issueType, masterIssueType.color as issueTypeColor, assigneeUser.id as assigneeUserId, assigneeUser.avatarUrl as assigneeAvatarUrl, assigneeMember.username as assigneeUsername, creatorUser.avatarUrl as creatorAvatarUrl, creatorMember.username as creatorUsername',
+        'issue.*, masterIssueType.issueType, masterIssueType.color as issueTypeColor, assigneeUser.id as assigneeUserId, assigneeUser.avatarUrl as assigneeAvatarUrl, assigneeMember.username as assigneeUsername, assigneeMember.isRemoved as isAssigneeRemoved, creatorUser.avatarUrl as creatorAvatarUrl, creatorMember.username as creatorUsername, creatorMember.isRemoved as isCreatorRemoved',
       )
       .where({ id: issueId })
       .getRawOne();
