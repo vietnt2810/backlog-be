@@ -47,13 +47,23 @@ export class MembersService {
         where: { userId: user.id, projectId: addMemberRequestBody.projectId },
       });
 
-      if (await isEmpty(alreadyAddedUser)) {
+      if (isEmpty(alreadyAddedUser)) {
         await this.memberRepository.save({
           projectId: addMemberRequestBody.projectId,
           userId: user ? user.id : addMemberRequestBody.userId,
           role: addMemberRequestBody.role,
           username: user.username,
         });
+      } else if (!isEmpty(alreadyAddedUser) && alreadyAddedUser.isRemoved) {
+        await this.memberRepository.update(
+          {
+            projectId: addMemberRequestBody.projectId,
+            userId: user ? user.id : addMemberRequestBody.userId,
+          },
+          {
+            isRemoved: false,
+          },
+        );
       } else {
         throw new BadRequestException('User is already added');
       }
@@ -78,7 +88,10 @@ export class MembersService {
   }
 
   async deleteMember(projectId: number, memberId: number) {
-    return await this.memberRepository.delete({ userId: memberId, projectId });
+    return await this.memberRepository.update(
+      { userId: memberId, projectId },
+      { isRemoved: true },
+    );
   }
 
   async getMembers(
@@ -87,6 +100,7 @@ export class MembersService {
   ) {
     const data = await this.memberRepository.find({
       where: {
+        isRemoved: false,
         projectId,
       },
       relations: {
@@ -149,6 +163,7 @@ export class MembersService {
   async getProjects(userId: number) {
     const data = await this.memberRepository.find({
       where: {
+        isRemoved: false,
         userId,
       },
       relations: {

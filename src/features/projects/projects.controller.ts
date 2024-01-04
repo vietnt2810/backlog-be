@@ -96,7 +96,7 @@ export class ProjectsController {
     );
   }
 
-  @Delete(':projectId/members/:memberId')
+  @Put(':projectId/members/:memberId/delete-member')
   deleteMember(
     @Param('projectId', ParseIntPipe) projectId: number,
     @Param('memberId', ParseIntPipe) memberId: number,

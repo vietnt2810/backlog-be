@@ -29,6 +29,9 @@ export class Member {
   @CreateDateColumn()
   joinedDate: Date;
 
+  @Column({ default: false })
+  isRemoved: boolean;
+
   @ManyToOne(() => User)
   @JoinColumn()
   user: User;
