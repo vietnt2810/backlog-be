@@ -4,12 +4,9 @@ import {
   Get,
   Param,
   ParseIntPipe,
-  Post,
   Put,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { User } from './users.entity';
-import { Public } from '../auth/guard/auth.guard';
 import { MembersService } from '../members/members.service';
 import { UpdateUserProfileDto } from './dtos/updateUserProfile.dto';
 
