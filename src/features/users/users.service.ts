@@ -35,7 +35,12 @@ export class UsersService {
       {
         email: updateUserProfileRequestBody.email,
       },
-      { ...updateUserProfileRequestBody },
+      {
+        ...updateUserProfileRequestBody,
+        avatarUrl: updateUserProfileRequestBody?.avatarUrl
+          ? updateUserProfileRequestBody?.avatarUrl.fileUrl
+          : null,
+      },
     );
   }
 }

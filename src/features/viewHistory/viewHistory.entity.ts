@@ -1,9 +1,12 @@
 import {
   Column,
   Entity,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Issue } from '../issues/issues.entity';
 
 @Entity()
 export class ViewHistory {
@@ -21,4 +24,10 @@ export class ViewHistory {
 
   @UpdateDateColumn()
   lastViewedAt: Date;
+
+  @ManyToOne(() => Issue, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn()
+  issue: Issue;
 }

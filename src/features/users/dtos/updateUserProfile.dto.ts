@@ -8,5 +8,5 @@ export class UpdateUserProfileDto {
   email: string;
 
   @IsOptional()
-  avatarUrl: string | null;
+  avatarUrl: any;
 }
