@@ -156,7 +156,7 @@ export class IssuesService {
     getIssuesParams.type &&
       resultData.length &&
       (resultData = resultData.filter(
-        (item) => item.type === Number(getIssuesParams.type),
+        (item) => item.issueTypeId === Number(getIssuesParams.type),
       ));
     // query with assignee
     getIssuesParams.assigneeId &&
