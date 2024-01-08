@@ -40,10 +40,10 @@ export class Issue {
   priority: number;
 
   @Column({ nullable: true })
-  startDate: string;
+  startDate: Date;
 
   @Column({ nullable: true })
-  dueDate: string;
+  dueDate: Date;
 
   @Column({ nullable: true })
   estimatedHour: string;
