@@ -5,4 +5,5 @@ export type GetIssuesParams = {
   status?: number;
   type?: number;
   assigneeId?: number;
+  isOverdue?: number;
 } & PaginationParams;

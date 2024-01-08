@@ -140,6 +140,12 @@ export class IssuesService {
             .toLowerCase()
             .includes(getIssuesParams.keyword.toLowerCase()),
       ));
+    // query with isExpired
+    Number(getIssuesParams.isOverdue) === 1 &&
+      resultData.length &&
+      (resultData = resultData.filter(
+        (item) => item.dueDate && item.dueDate.getTime() < new Date().getTime(),
+      ));
     // query with issue status
     getIssuesParams.status &&
       resultData.length &&
